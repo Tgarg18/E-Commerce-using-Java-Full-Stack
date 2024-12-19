@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import './App.css'
+import Navigation from './customer/components/Navigation/Navigation'
+import HomePage from './customer/pages/HomePage/HomePage'
 
 function App() {
 
   return (
-    <>
-    <div className="bg-green-300 text-green-900 text-center">Hello</div>
-    </>
+    <div>
+      <Navigation />
+      <div>
+        <HomePage />
+      </div>
+    </div>
   )
 }
 
