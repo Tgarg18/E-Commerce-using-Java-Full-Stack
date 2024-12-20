@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Navigation from './customer/components/Navigation/Navigation'
 import HomePage from './customer/pages/HomePage/HomePage'
+import Footer from './customer/components/Footer/Footer'
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
       <div className=''>
         <HomePage />
       </div>
+      <Footer />
     </div>
   )
 }
