@@ -51,14 +51,14 @@ export default function App() {
       searchParams.set(sectionId, filterValue.join(','));
     }
     const query = searchParams.toString();
-    navigate({ search : `?${query}`});
+    navigate({ search: `?${query}` });
   }
 
   const handleRadioFilterChange = (e, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
-    searchParams.set( sectionId, e.target.value );
+    searchParams.set(sectionId, e.target.value);
     const query = searchParams.toString();
-    navigate({ search : `?${query}`});
+    navigate({ search: `?${query}` });
   }
 
   return (
@@ -170,7 +170,7 @@ export default function App() {
                           >
                             <div className="relative">
                               <input
-                              onChange={(e) => handleRadioFilterChange(e, section.id)}
+                                onChange={(e) => handleRadioFilterChange(e, section.id)}
                                 id={`singlefilter-${section.id}-${optionIdx}`}
                                 name={section.id}
                                 type="radio"
@@ -254,7 +254,7 @@ export default function App() {
               <div>
                 <div className='lg:flex items-center justify-between py-4 hidden'>
                   <h1 className='text-xl opacity-50 font-bold'>Filters</h1>
-                  <FilterListIcon />
+                  <FilterListIcon sx={{ color: 'rgb(127, 127, 127)' }} />
                 </div>
                 <form className="hidden lg:block">
                   {filters.map((section) => (
