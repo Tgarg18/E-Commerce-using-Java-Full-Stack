@@ -117,7 +117,7 @@ export default function ProductDetails() {
                     {/* Product info */}
                     <div className="lg:col-span-1 max-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
                         <div className="lg:col-span-2">
-                            <h1 className="text-lg lg:text-xl font-semibol text-gray-900">UniversalOutfit</h1>
+                            <h1 className="text-lg lg:text-xl font-semibold text-gray-900">UniversalOutfit</h1>
                             <h1 className='text-lg lg:text-xltext-gray-900 opacity-60 pt-1'>
                                 Casual Puff Sleeves Solid Women White Top
                             </h1>
@@ -193,7 +193,7 @@ export default function ProductDetails() {
                                     </fieldset>
                                 </div>
 
-                                <Button color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}>
+                                <Button color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" }, mt: 5, width: '100%' }}>
                                     Add To Cart
                                 </Button>
                             </form>
