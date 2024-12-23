@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
 import { men_kurta } from '../../../Data/men_kurta'
 import ProductCard from '../Product/ProductCard'
-import HomeSectionCard from '../HomeSectionCard/HomeSectionCard'
+import { useNavigate } from 'react-router-dom'
 
 const product = {
     name: 'Basic Tee 6-Pack',
@@ -55,15 +54,18 @@ const product = {
     details:
         'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 }
-const reviews = { href: '#', average: 4, totalCount: 117 }
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function ProductDetails() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+    
+    const navigate = useNavigate();
+    const handleAddToCart = ()=>{
+        navigate('/cart');
+    }
 
     return (
         <div className="bg-white lg:px-20">
@@ -194,7 +196,7 @@ export default function ProductDetails() {
                                     </fieldset>
                                 </div>
 
-                                <Button color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" }, mt: 5, width: '100%' }}>
+                                <Button onClick={handleAddToCart} color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" }, mt: 5, width: '100%' }}>
                                     Add To Cart
                                 </Button>
                             </form>
