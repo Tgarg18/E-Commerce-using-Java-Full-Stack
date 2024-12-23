@@ -106,9 +106,10 @@ export default function ProductDetails() {
                             className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem] h-full w-full object-cover object-center"
                         />
                         <div className="flex justify-center space-x-5 flex-wrap w-full ">
-                            {product.images.map((item) => <img
+                            {product.images.map((item, index) => <img
                                 draggable={false}
                                 alt={item.alt}
+                                key={index}
                                 src={item.src}
                                 className="overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] h-full w-full mt-4 object-cover object-center"
                             />)}
@@ -241,14 +242,14 @@ export default function ProductDetails() {
                         <Grid container spacing={7}>
                             <Grid item xs={7}>
                                 <div className='space-y-5'>
-                                    {[1,1,1,1].map((item)=> <ProductReviewCard/>)}
-                                    
+                                    {[1, 1, 1, 1].map((item, index) => <ProductReviewCard key={index} />)}
+
                                 </div>
                             </Grid>
                             <Grid item xs={5}>
                                 <h1 className='text-xl font-semibold pb-2'>Product Ratings</h1>
                                 <div className='flex items-center space-x-3'>
-                                    <Rating name="read-only" value={4.6} precision={0.5} readOnly/>
+                                    <Rating name="read-only" value={4.6} precision={0.5} readOnly />
                                     <p className='opacity-60'>54890 Ratings</p>
                                 </div>
                                 <Box className='mt-5 space-y-3'>
@@ -257,7 +258,7 @@ export default function ProductDetails() {
                                             <p className=''>Excellent</p>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={40} sx={{bgcolor: '#d0d0d0',borderRadius: 4,height: 7,'& .MuiLinearProgress-bar': { backgroundColor: '#4CAF50' } }} />
+                                            <LinearProgress variant='determinate' value={40} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#4CAF50' } }} />
                                         </Grid>
                                     </Grid>
                                     <Grid container alignItems="center" gap={2}>
@@ -265,7 +266,7 @@ export default function ProductDetails() {
                                             <p>Very Good</p>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={30} sx={{bgcolor: '#d0d0d0',borderRadius: 4,height: 7,'& .MuiLinearProgress-bar': { backgroundColor: '#8BC34A' } }} />
+                                            <LinearProgress variant='determinate' value={30} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#8BC34A' } }} />
                                         </Grid>
                                     </Grid>
                                     <Grid container alignItems="center" gap={2}>
@@ -273,7 +274,7 @@ export default function ProductDetails() {
                                             <p>Good</p>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={25} sx={{bgcolor: '#d0d0d0',borderRadius: 4,height: 7,'& .MuiLinearProgress-bar': { backgroundColor: '#FFD700' } }} />
+                                            <LinearProgress variant='determinate' value={25} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#FFD700' } }} />
                                         </Grid>
                                     </Grid>
                                     <Grid container alignItems="center" gap={2}>
@@ -281,7 +282,7 @@ export default function ProductDetails() {
                                             <p>Average</p>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={20} sx={{bgcolor: '#d0d0d0',borderRadius: 4,height: 7,'& .MuiLinearProgress-bar': { backgroundColor: '#FF9800' } }} />
+                                            <LinearProgress variant='determinate' value={20} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#FF9800' } }} />
                                         </Grid>
                                     </Grid>
                                     <Grid container alignItems="center" gap={2}>
@@ -289,7 +290,7 @@ export default function ProductDetails() {
                                             <p>Poor</p>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={10} sx={{bgcolor: '#d0d0d0',borderRadius: 4,height: 7,'& .MuiLinearProgress-bar': { backgroundColor: '#F44336' } }} />
+                                            <LinearProgress variant='determinate' value={10} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#F44336' } }} />
                                         </Grid>
                                     </Grid>
                                 </Box>
@@ -299,12 +300,12 @@ export default function ProductDetails() {
                 </section>
 
                 {/* Similar products */}
-                <section className='py-10'>
+                <section className='pt-10'>
                     <h1 className='font-bold text-xl py-5'>Similar Products</h1>
                     <div className='flex flex-wrap space-y-5'>
                         {
-                            men_kurta.map((item) => {
-                                return <ProductCard product={item} />;
+                            men_kurta.map((item, index) => {
+                                return <ProductCard product={item} key={index} />;
                             })
                         }
                     </div>

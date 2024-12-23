@@ -244,7 +244,7 @@ export default function App() {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <section aria-labelledby="products-heading" className="pb-14 pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
@@ -356,8 +356,8 @@ export default function App() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {men_kurta.map((item) => (
-                    <ProductCard key={item.id} product={item} />
+                  {men_kurta.map((item, index) => (
+                    <ProductCard key={index} product={item} />
                   ))}
                 </div>
               </div>
