@@ -40,6 +40,7 @@ export default function Navigation() {
 
   const handleCategoryClick = (category, section, item, close) => {
     navigate(`/${category.id}/${section.id}/${item.id}`);
+    setOpen(false);
     close();
   };
 
@@ -154,7 +155,7 @@ export default function Navigation() {
                             >
                               {section.items.map((item) => (
                                 <li key={item.name} className="flow-root">
-                                  <p onClick={() => handleCategoryClick(category, section, item, close)} className="-m-2 block p-2 text-gray-500">
+                                  <p onClick={() => handleCategoryClick(category, section, item, close)} className="-m-2 block p-2 text-gray-500 cursor-pointer hover:text-gray-800">
                                     {item.name}
                                   </p>
                                 </li>
