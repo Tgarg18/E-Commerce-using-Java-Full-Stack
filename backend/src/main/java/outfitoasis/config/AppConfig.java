@@ -5,9 +5,7 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.NonNull;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,16 +19,18 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 public class AppConfig {
+    @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests(
                         Authorize -> Authorize.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
                 .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+                .csrf().disable()
+                .cors().configurationSource(new CorsConfigurationSource() {
+                    
                     @Override
-                    public CorsConfiguration getCorsConfiguration(@NonNull HttpServletRequest request) {
+                    public CorsConfiguration getCorsConfiguration( HttpServletRequest request) {
                         CorsConfiguration cfg = new CorsConfiguration();
 
                         cfg.setAllowedOrigins(Arrays.asList(
@@ -46,7 +46,8 @@ public class AppConfig {
                         cfg.setMaxAge(3600L);
                         return cfg;
                     }
-                })).httpBasic(withDefaults()).formLogin(withDefaults());
+                })
+                .and().httpBasic().and().formLogin();
         return http.build();
     }
 
