@@ -11,20 +11,16 @@ import outfitoasis.model.CartItem;
 import outfitoasis.model.Product;
 import outfitoasis.model.User;
 import outfitoasis.repository.CartItemRepository;
-import outfitoasis.repository.CartRepository;
 
 @Service
 public class CartItemServiceImplementation implements CartItemService {
 
     private CartItemRepository cartItemRepository;
     private UserService userService;
-    private CartRepository cartRepository;
 
-    public CartItemServiceImplementation(CartItemRepository cartItemRepository, UserService userService,
-            CartRepository cartRepository) {
+    public CartItemServiceImplementation(CartItemRepository cartItemRepository, UserService userService) {
         this.cartItemRepository = cartItemRepository;
         this.userService = userService;
-        this.cartRepository = cartRepository;
     }
 
     @Override

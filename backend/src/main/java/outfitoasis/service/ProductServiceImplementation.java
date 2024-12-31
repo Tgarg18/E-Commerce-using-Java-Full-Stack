@@ -22,13 +22,10 @@ import outfitoasis.request.CreateProductRequest;
 public class ProductServiceImplementation implements ProductService {
 
     private ProductRepository productRepository;
-    private UserService userService;
     private CategoryRepository categoryRepository;
 
-    public ProductServiceImplementation(ProductRepository productRepository, UserService userService,
-            CategoryRepository categoryRepository) {
+    public ProductServiceImplementation(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-        this.userService = userService;
         this.categoryRepository = categoryRepository;
     }
 
