@@ -25,15 +25,16 @@ public class AppConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests(
                         Authorize -> Authorize
-                        .requestMatchers("/api/**").authenticated()
-                        .anyRequest()
-                        .permitAll())
+                                .requestMatchers("/api/**")
+                                .authenticated()
+                                .anyRequest()
+                                .permitAll())
                 .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
                 .csrf().disable()
                 .cors().configurationSource(new CorsConfigurationSource() {
-                    
+
                     @Override
-                    public CorsConfiguration getCorsConfiguration( HttpServletRequest request) {
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration cfg = new CorsConfiguration();
 
                         cfg.setAllowedOrigins(Arrays.asList(
@@ -50,7 +51,7 @@ public class AppConfig {
                         return cfg;
                     }
                 })
-                .and().httpBasic();
+                .and().httpBasic().and().formLogin();
         return http.build();
     }
 
