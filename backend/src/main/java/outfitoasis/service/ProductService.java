@@ -17,6 +17,8 @@ public interface ProductService {
 
     public Product findProductById(Long id) throws ProductException;
 
+    public List<Product> findAllProducts();
+
     public List<Product> findProductByCategory(String category);
 
     public Page<Product> getAllProduct(String category, List<String> colors, List<String> sizes, Integer minPrice,

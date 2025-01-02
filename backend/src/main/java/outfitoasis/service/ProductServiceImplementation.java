@@ -102,8 +102,13 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public List<Product> findProductByCategory(String category) {
-        return null;
+        return productRepository.findProductByCategory(category);
     }
 
     @Override

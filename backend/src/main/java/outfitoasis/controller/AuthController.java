@@ -19,6 +19,7 @@ import outfitoasis.model.User;
 import outfitoasis.repository.UserRepository;
 import outfitoasis.request.LoginRequest;
 import outfitoasis.response.AuthResponse;
+import outfitoasis.service.CartService;
 import outfitoasis.service.CustomUserServiceImplementation;
 
 @RestController
@@ -29,13 +30,15 @@ public class AuthController {
     private JwtProvider jwtProvider;
     private PasswordEncoder passwordEncoder;
     private CustomUserServiceImplementation customUserServiceImplementation;
+    private CartService cartService;
 
     AuthController(UserRepository userRepository, CustomUserServiceImplementation customUserServiceImplementation,
-            PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+            PasswordEncoder passwordEncoder, JwtProvider jwtProvider, CartService cartService) {
         this.userRepository = userRepository;
         this.customUserServiceImplementation = customUserServiceImplementation;
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
+        this.cartService = cartService;
     }
 
     @PostMapping("/signup")
@@ -55,7 +58,7 @@ public class AuthController {
         createdUser.setLastName(lastName);
 
         User savedUser = userRepository.save(createdUser);
-
+        cartService.createCart(savedUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail(),
                 savedUser.getPassword());
 

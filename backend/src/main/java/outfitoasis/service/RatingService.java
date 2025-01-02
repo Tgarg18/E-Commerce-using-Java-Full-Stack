@@ -11,7 +11,7 @@ public interface RatingService {
 
     public Rating createRating(RatingRequest req,User user) throws ProductException;
 
-    public List<Rating>getProducRating(Long productId);
+    public List<Rating>getProductRating(Long productId);
 
 }
 
