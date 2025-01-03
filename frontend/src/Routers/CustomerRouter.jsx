@@ -10,15 +10,15 @@ import Checkout from '../customer/components/Checkout/Checkout'
 import Order from '../customer/components/Order/Order'
 import OrderDetails from '../customer/components/Order/OrderDetails'
 import ScrollToTop from '../customer/components/ScrollToTop/ScrollToTop'
+import ErrorPage from '../customer/pages/ErrorPage/ErrorPage'
 const CustomerRouter = () => {
     return (
         <div>
             <div>
                 <Navigation />
             </div>
-
+            <ScrollToTop />
             <Routes>
-                <ScrollToTop />
                 <Route path='/login' element={<HomePage />} />
                 <Route path='/signup' element={<HomePage />} />
                 <Route path='/' element={<HomePage />} />
@@ -28,7 +28,7 @@ const CustomerRouter = () => {
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path='/account/order' element={<Order />} />
                 <Route path='/account/order/:orderId' element={<OrderDetails />} />
-
+                <Route path='*' element={<ErrorPage />} />
             </Routes>
 
             <div className='mt-10'>

@@ -11,7 +11,6 @@ function App() {
   return (
     <div>
       <Routes>
-        <ScrollToTop />
         <Route path='/*' element={<CustomerRouter />} />
       </Routes>
     </div>
