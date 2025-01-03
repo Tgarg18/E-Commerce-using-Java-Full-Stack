@@ -9,6 +9,7 @@ import ProductDetails from '../customer/components/ProductDetails/ProductDetails
 import Checkout from '../customer/components/Checkout/Checkout'
 import Order from '../customer/components/Order/Order'
 import OrderDetails from '../customer/components/Order/OrderDetails'
+import ScrollToTop from '../customer/components/ScrollToTop/ScrollToTop'
 const CustomerRouter = () => {
     return (
         <div>
@@ -17,7 +18,7 @@ const CustomerRouter = () => {
             </div>
 
             <Routes>
-
+                <ScrollToTop />
                 <Route path='/login' element={<HomePage />} />
                 <Route path='/signup' element={<HomePage />} />
                 <Route path='/' element={<HomePage />} />
