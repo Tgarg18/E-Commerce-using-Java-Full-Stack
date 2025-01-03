@@ -15,8 +15,11 @@ const CustomerRouter = () => {
             <div>
                 <Navigation />
             </div>
+
             <Routes>
 
+                <Route path='/login' element={<HomePage />} />
+                <Route path='/signup' element={<HomePage />} />
                 <Route path='/' element={<HomePage />} />
                 <Route path='/:levelOne/:levelTwo/:levelThree' element={<Product />} />
                 <Route path='/product/:productId' element={<ProductDetails />} />
@@ -26,6 +29,7 @@ const CustomerRouter = () => {
                 <Route path='/account/order/:orderId' element={<OrderDetails />} />
 
             </Routes>
+
             <div className='mt-10'>
                 <Footer />
             </div>

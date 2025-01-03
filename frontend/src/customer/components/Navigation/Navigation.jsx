@@ -10,7 +10,10 @@ import {
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { navigation } from "./navigationData";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import AuthModal from "../../Auth/AuthModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, logout } from "../../../State/Auth/Action";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,6 +26,9 @@ export default function Navigation() {
   const [anchorEl, setAnchorEl] = useState(null);
   const openUserMenu = Boolean(anchorEl);
   const jwt = localStorage.getItem("jwt");
+  const { auth } = useSelector(store => store)
+  const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleUserClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,6 +48,28 @@ export default function Navigation() {
     navigate(`/${category.id}/${section.id}/${item.id}`);
     setOpen(false);
     close();
+  };
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt));
+    }
+  }, [jwt, auth.jwt])
+
+  useEffect(() => {
+    if (auth.user) {
+      handleClose();
+    }
+    if (location.pathname === '/login' || location.pathname === '/signup') {
+      navigate(-1);
+    }
+  }, [auth.user])
+
+  const handleLogout = () => {
+    localStorage.clear();
+    dispatch(logout());
+    handleCloseUserMenu();
+    navigate("/");
   };
 
   return (
@@ -183,12 +211,16 @@ export default function Navigation() {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <a
-                      href="/"
-                      className="-m-2 block p-2 font-medium text-gray-900"
+                    <span
+                      className="-m-2 block p-2 font-medium text-gray-900 cursor-pointer hover:text-blue-500"
+                      onClick={() => {
+                        setOpen(false);
+                        handleOpen();
+                        navigate('/login');
+                      }}
                     >
                       Sign in
-                    </a>
+                    </span>
                   </div>
                 </div>
 
@@ -373,7 +405,7 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {true ? (
+                  {auth.user?.firstName ? (
                     <div>
                       <Avatar
                         className="text-white"
@@ -388,8 +420,7 @@ export default function Navigation() {
                           cursor: "pointer",
                         }}
                       >
-                        {/* {auth.user?.firstName[0].toUpperCase()} */}
-                        T
+                        {auth.user?.firstName[0].toUpperCase()}
                       </Avatar>
                       <Menu
                         id="basic-menu"
@@ -406,12 +437,15 @@ export default function Navigation() {
                         <MenuItem onClick={() => navigate('/account/order')}>
                           My Orders
                         </MenuItem>
-                        <MenuItem>Logout</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
                       </Menu>
                     </div>
                   ) : (
                     <Button
-                      onClick={handleOpen}
+                      onClick={() => {
+                        handleOpen();
+                        navigate('/login');
+                      }}
                       className="text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       Signin
@@ -453,7 +487,7 @@ export default function Navigation() {
           </div>
         </nav>
       </header>
-      {/* <AuthModal handleClose={handleClose} open={openAuthModal} /> */}
+      <AuthModal handleClose={handleClose} open={openAuthModal} />
     </div>
   );
 }
