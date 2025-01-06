@@ -1,5 +1,7 @@
 package outfitoasis.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -56,6 +58,7 @@ public class AuthController {
         createdUser.setPassword(passwordEncoder.encode(password));
         createdUser.setFirstName(firstName);
         createdUser.setLastName(lastName);
+        createdUser.setCreatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(createdUser);
         cartService.createCart(savedUser);
