@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,12 +41,12 @@ public class AppConfig {
 
             @Override
             @Nullable
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+            public CorsConfiguration getCorsConfiguration(@NonNull HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(Collections.singletonList("*"));
+                cfg.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
-                cfg.setAllowCredentials(true);
+                cfg.setAllowCredentials(false);
                 cfg.setExposedHeaders(Collections.singletonList("Authorization"));
                 cfg.setMaxAge(3600L);
                 return cfg;
