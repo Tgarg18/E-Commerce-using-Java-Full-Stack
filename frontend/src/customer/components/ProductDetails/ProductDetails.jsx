@@ -1,82 +1,53 @@
-import { useState } from 'react'
-import { Radio, RadioGroup } from '@headlessui/react'
-import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
-import ProductReviewCard from './ProductReviewCard'
-import { men_kurta } from '../../../Data/men_kurta'
-import ProductCard from '../Product/ProductCard'
-import { useNavigate } from 'react-router-dom'
-
-const product = {
-    name: 'Basic Tee 6-Pack',
-    price: '$192',
-    href: '#',
-    breadcrumbs: [
-        { id: 1, name: 'Men', href: '#' },
-        { id: 2, name: 'Clothing', href: '#' },
-    ],
-    images: [
-        {
-            src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-            alt: 'Two each of gray, white, and black shirts laying flat.',
-        },
-        {
-            src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-            alt: 'Model wearing plain black basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-            alt: 'Model wearing plain gray basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-            alt: 'Model wearing plain white basic tee.',
-        },
-    ],
-    colors: [
-        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-        { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-    ],
-    sizes: [
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
-    ],
-    description:
-        'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-    highlights: [
-        'Hand cut and sewn locally',
-        'Dyed with our proprietary colors',
-        'Pre-washed & pre-shrunk',
-        'Ultra-soft 100% cotton',
-    ],
-    details:
-        'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
+import { useEffect, useState } from 'react';
+import { Radio, RadioGroup } from '@headlessui/react';
+import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material';
+import ProductReviewCard from './ProductReviewCard';
+import { men_kurta } from '../../../Data/men_kurta';
+import ProductCard from '../Product/ProductCard';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { findProductsById } from '../../../State/Product/Action';
+import { addItemToCart } from '../../../State/Cart/Action';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function ProductDetails() {
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-    
+    const [selectedSize, setSelectedSize] = useState(null);
+
     const navigate = useNavigate();
-    const handleAddToCart = ()=>{
+    const params = useParams();
+    const dispatch = useDispatch();
+
+    const { products } = useSelector(store => store);
+
+    const handleAddToCart = () => {
+        const data = {
+            productId: params.productId,
+            size: selectedSize.name
+        }
+        dispatch(addItemToCart(data));
         navigate('/cart');
-    }
+    };
+
+    useEffect(() => {
+        const data = {
+            productId: params.productId,
+        }
+        dispatch(findProductsById(data));
+    }, [params.productId]);
 
     return (
         <div className="bg-white lg:px-20">
             <div className="pt-6">
                 <nav aria-label="Breadcrumb">
                     <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-                        {product.breadcrumbs.map((breadcrumb) => (
+                        {products?.product?.data?.breadcrumbs?.map((breadcrumb) => (
                             <li key={breadcrumb.id}>
                                 <div className="flex items-center">
                                     <a href={breadcrumb.href} className="mr-2 text-sm font-medium text-gray-900">
-                                        {breadcrumb.name}
+                                        {breadcrumb?.name}
                                     </a>
                                     <svg
                                         fill="currentColor"
@@ -92,8 +63,9 @@ export default function ProductDetails() {
                             </li>
                         ))}
                         <li className="text-sm">
-                            <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                                {product.name}
+                            <a href={""} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                                {/* {products?.product?.data?.brand} */}
+                                To do: Men/Clothing/Men Kurta
                             </a>
                         </li>
                     </ol>
@@ -103,12 +75,12 @@ export default function ProductDetails() {
                     <div className="flex flex-col items-center">
                         <img
                             draggable={false}
-                            alt={product.images[0].alt}
-                            src={product.images[0].src}
+                            alt={products?.product?.data?.imageUrl}
+                            src={products?.product?.data?.imageUrl}
                             className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem] h-full w-full object-cover object-center"
                         />
                         <div className="flex justify-center space-x-5 flex-wrap w-full ">
-                            {product.images.map((item, index) => <img
+                            {products?.product?.data?.images?.map((item, index) => <img
                                 draggable={false}
                                 alt={item.alt}
                                 key={index}
@@ -120,9 +92,9 @@ export default function ProductDetails() {
                     {/* Product info */}
                     <div className="lg:col-span-1 max-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
                         <div className="lg:col-span-2">
-                            <h1 className="text-lg lg:text-xl font-semibold text-gray-900">UniversalOutfit</h1>
+                            <h1 className="text-lg lg:text-xl font-semibold text-gray-900">{products.product?.data?.brand}</h1>
                             <h1 className='text-lg lg:text-xltext-gray-900 opacity-60 pt-1'>
-                                Casual Puff Sleeves Solid Women White Top
+                                {products.product?.data?.title}
                             </h1>
                         </div>
 
@@ -130,9 +102,9 @@ export default function ProductDetails() {
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h2 className="sr-only">Product information</h2>
                             <div className='flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6'>
-                                <p className='font-semibold'>₹199</p>
-                                <p className='line-through opacity-50'>₹211</p>
-                                <p className='text-green-600 font-semibold'>5% off</p>
+                                <p className='font-semibold'>₹{products.product?.data?.discountedPrice}</p>
+                                <p className='line-through opacity-50'>₹{products.product?.data?.price}</p>
+                                <p className='text-green-600 font-semibold'>{products.product?.data?.discountPercent}% off</p>
                             </div>
                             {/* Reviews */}
                             <div className="mt-6">
@@ -157,20 +129,20 @@ export default function ProductDetails() {
                                             onChange={setSelectedSize}
                                             className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
                                         >
-                                            {product.sizes.map((size) => (
+                                            {products?.product?.data?.sizes?.map((size) => (
                                                 <Radio
                                                     key={size.name}
                                                     value={size}
-                                                    disabled={!size.inStock}
+                                                    disabled={size.quantity > 0 ? false : true}
                                                     className={classNames(
-                                                        size.inStock
+                                                        size.quantity > 0
                                                             ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                                                             : 'cursor-not-allowed bg-gray-50 text-gray-200',
                                                         'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-indigo-500 sm:flex-1 sm:py-6',
                                                     )}
                                                 >
                                                     <span>{size.name}</span>
-                                                    {size.inStock ? (
+                                                    {size.quantity > 0 ? (
                                                         <span
                                                             aria-hidden="true"
                                                             className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
@@ -205,19 +177,19 @@ export default function ProductDetails() {
                         <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
                             {/* Description and details */}
                             <div>
-                                <h3 className="sr-only">Description</h3>
+                                <h3 className="font-medium text-gray-900 py-2">{products?.product?.data?.description ? "Description" : ""}</h3>
 
                                 <div className="space-y-6">
-                                    <p className="text-base text-gray-900">{product.description}</p>
+                                    <p className="text-base text-gray-900">{products?.product?.data?.description}</p>
                                 </div>
                             </div>
 
                             <div className="mt-10">
-                                <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+                                <h3 className="text-sm font-medium text-gray-900">{products?.product?.data?.highlights ? "Highlights" : ""}</h3>
 
                                 <div className="mt-4">
                                     <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                                        {product.highlights.map((highlight) => (
+                                        {products?.product?.data?.highlights?.map((highlight) => (
                                             <li key={highlight} className="text-gray-400">
                                                 <span className="text-gray-600">{highlight}</span>
                                             </li>
@@ -227,10 +199,10 @@ export default function ProductDetails() {
                             </div>
 
                             <div className="mt-10">
-                                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                                <h2 className="text-sm font-medium text-gray-900">{products?.product?.data?.details ? "Details" : ""}</h2>
 
                                 <div className="mt-4 space-y-6">
-                                    <p className="text-sm text-gray-600">{product.details}</p>
+                                    <p className="text-sm text-gray-600">{products?.product?.data?.details}</p>
                                 </div>
                             </div>
                         </div>

@@ -1,29 +1,37 @@
-import { Box, Button, Grid, TextField } from '@mui/material'
-import React from 'react'
-import AddressCard from '../AddessCard/AddressCard'
+import { Box, Button, Grid, TextField } from '@mui/material';
+import React from 'react';
+import AddressCard from '../AddessCard/AddressCard';
+import { useDispatch } from 'react-redux';
+import { createOrder } from '../../../State/Order/Action';
+import { useNavigate } from 'react-router-dom';
 
 const DeliveryAddressForm = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Address Submitted Successfully');
     const data = new FormData(e.currentTarget);
     const address = {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
-      address: data.get('address'),
+      streetAddress: data.get('address'),
       city: data.get('city'),
       state: data.get('state'),
-      pin: data.get('pin'),
-      phoneNumber: data.get('phoneNumber'),
-    }
-    console.log("Address Data: ", address);
-  }
+      pinCode: data.get('pin'),
+      mobile: data.get('phoneNumber'),
+    };
+    const orderData = { address, navigate };
+    dispatch(createOrder(orderData));
+  };
+
   return (
     <div>
       <Grid container spacing={4}>
         <Grid className='border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll' item xs={12} lg={5}>
           <div className='p-5 py-7 border-b cursor-pointer'>
-            <AddressCard />
+            <AddressCard address={{"dsf":'asd'}} />
             <Button sx={{ mt: 2, bgcolor: '#9155fd', ":hover": { bgcolor: '#7e4cc9' } }} size='large' variant='contained'>Deliver Here</Button>
           </div>
         </Grid>

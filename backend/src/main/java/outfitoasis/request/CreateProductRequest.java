@@ -10,7 +10,7 @@ public class CreateProductRequest {
     private String description;
     private int price;
     private int discountedPrice;
-    private int discountedPrecent;
+    private int discountedPercent;
     private int quantity;
     private String brand;
     private String color;
@@ -43,11 +43,11 @@ public class CreateProductRequest {
     public void setDiscountedPrice(int discountedPrice) {
         this.discountedPrice = discountedPrice;
     }
-    public int getDiscountedPrecent() {
-        return discountedPrecent;
+    public int getDiscountedPercent() {
+        return discountedPercent;
     }
-    public void setDiscountedPrecent(int discountedPrecent) {
-        this.discountedPrecent = discountedPrecent;
+    public void setDiscountedPercent(int discountedPercent) {
+        this.discountedPercent = discountedPercent;
     }
     public int getQuantity() {
         return quantity;

@@ -2,6 +2,7 @@ package outfitoasis.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,16 @@ import outfitoasis.service.ProductService;
 @RequestMapping("/api")
 public class ProductController {
 
+    @Autowired
     private ProductService productService;
 
     @GetMapping("/products")
     public ResponseEntity<Page<Product>> findProductByCategoryHandler(@RequestParam String category,
-            @RequestParam List<String> color, @RequestParam List<String> size, @RequestParam Integer minPrice,
+            @RequestParam List<String> colors, @RequestParam List<String> sizes, @RequestParam Integer minPrice,
             @RequestParam Integer maxPrice, @RequestParam Integer minDiscount, @RequestParam String sort,
             @RequestParam String stock, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
 
-        Page<Product> res = productService.getAllProduct(category, color, size, minPrice, maxPrice, minDiscount, sort,
+        Page<Product> res = productService.getAllProduct(category, colors, sizes, minPrice, maxPrice, minDiscount, sort,
                 stock, pageNumber, pageSize);
         System.out.println("Complete Products");
 

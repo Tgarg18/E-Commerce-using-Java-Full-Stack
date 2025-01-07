@@ -22,7 +22,7 @@ public class Address {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "street_address")
+    @Column(name = "streetAddress")
     private String streetAddress;
 
     @Column(name = "city")

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
@@ -12,28 +12,52 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { men_kurta } from '../../../Data/men_kurta'
-import ProductCard from './ProductCard'
-import { filters, singleFilter } from './FilterData'
+} from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
+import ProductCard from './ProductCard';
+import { filters, singleFilter } from './FilterData';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { findProducts } from '../../../State/Product/Action';
+import Pagination from '@mui/material/Pagination';
 
 const sortOptions = [
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
+  { name: 'Price: Low to High', href: '', current: false },
+  { name: 'Price: High to Low', href: '', current: false },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function App() {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const params = useParams();
+  const dispatch = useDispatch();
+
+  const { products } = useSelector(store => store);
+
+  const decodedQueryString = decodeURIComponent(location.search);
+  const searchParams = new URLSearchParams(decodedQueryString);
+  const colorValue = searchParams.get('color');
+  const sizeValue = searchParams.get('size');
+  const priceValue = searchParams.get('price');
+  const discountValue = searchParams.get('discount');
+  const sortValue = searchParams.get('sort');
+  const pageNumber = searchParams.get('page') || 1;
+  const stock = searchParams.get('stock');
+
+  const handlePaginationChange = (event, value) => {
+    const searchParams = new URLSearchParams(Location.search);
+    searchParams.set("page", value);
+    const query = searchParams.toString();
+    navigate({ search: `?${query}` });
+  };
 
   const handleFilter = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
@@ -52,14 +76,34 @@ export default function App() {
     }
     const query = searchParams.toString();
     navigate({ search: `?${query}` });
-  }
+  };
 
   const handleRadioFilterChange = (e, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(sectionId, e.target.value);
     const query = searchParams.toString();
     navigate({ search: `?${query}` });
-  }
+  };
+
+  useEffect(() => {
+    const [minPrice, maxPrice] = priceValue === null ? [0, 10000] : priceValue.split('-').map(Number);
+
+    const data = {
+      category: params.levelThree,
+      colors: colorValue || [],
+      sizes: sizeValue || [],
+      minPrice,
+      maxPrice,
+      minDiscount: discountValue || 0,
+      sort: sortValue || 'price_low',
+      pageNumber: pageNumber - 1,
+      pageSize: 10,
+      stock: stock,
+    }
+
+    dispatch(findProducts(data));
+
+  }, [params.levelThree, colorValue, sizeValue, priceValue, discountValue, sortValue, stock, pageNumber]);
 
   return (
     <div className="bg-white">
@@ -356,11 +400,17 @@ export default function App() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {men_kurta.map((item, index) => (
+                  {products.products && products.products?.content?.map((item, index) => (
                     <ProductCard key={index} product={item} />
                   ))}
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section className='w-full px-[3.6rem]'>
+            <div className='px-4 py-5 flex justify-center'>
+              <Pagination count={products?.products?.totalPages} color="secondary" onChange={handlePaginationChange} />
             </div>
           </section>
         </main>
