@@ -1,14 +1,30 @@
 import { Box, Button, Grid, TextField } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddressCard from '../AddessCard/AddressCard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createOrder } from '../../../State/Order/Action';
 import { useNavigate } from 'react-router-dom';
+import { getUser } from '../../../State/Auth/Action';
 
 const DeliveryAddressForm = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { auth } = useSelector(state => state);
+
+  const handleExistingAddress = () => {
+    const address = {
+      firstName: auth.user?.firstName,
+      lastName: auth.user?.lastName,
+      streetAddress: auth.user?.address[auth.user?.address?.length - 1]?.streetAddress,
+      city: auth.user?.address[auth.user?.address?.length - 1]?.city,
+      state: auth.user?.address[auth.user?.address?.length - 1]?.state,
+      pinCode: auth.user?.address[auth.user?.address?.length - 1]?.pinCode,
+      mobile: auth.user?.address[auth.user?.address?.length - 1]?.mobile,
+    };
+    const orderData = { address, navigate };
+    dispatch(createOrder(orderData));
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,16 +42,22 @@ const DeliveryAddressForm = () => {
     dispatch(createOrder(orderData));
   };
 
+  useEffect(() => {
+    dispatch(getUser(localStorage.getItem('jwt')));
+  }, []);
+
   return (
     <div>
-      <Grid container spacing={4}>
-        <Grid className='border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll' item xs={12} lg={5}>
-          <div className='p-5 py-7 border-b cursor-pointer'>
-            <AddressCard address={{"dsf":'asd'}} />
-            <Button sx={{ mt: 2, bgcolor: '#9155fd', ":hover": { bgcolor: '#7e4cc9' } }} size='large' variant='contained'>Deliver Here</Button>
-          </div>
-        </Grid>
-        <Grid item xs={12} lg={7}>
+      <Grid container spacing={4} justifyContent={'center'}>
+        {auth.user?.address?.length > 0 &&
+          <Grid className='border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll' item xs={12} lg={5}>
+            <div className='p-5 py-7 border-b cursor-pointer'>
+              <AddressCard address={auth.user?.address[auth.user?.address?.length - 1]} />
+              <Button sx={{ mt: 2, bgcolor: '#9155fd', ":hover": { bgcolor: '#7e4cc9' } }} size='large' variant='contained' onClick={() => handleExistingAddress()}>Deliver Here</Button>
+            </div>
+          </Grid>
+        }
+        <Grid item xs={12} lg={7} marginTop={-4}>
           <Box className="border rounded-s-md shadow-md p-5">
             <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>

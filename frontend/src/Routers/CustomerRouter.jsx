@@ -11,6 +11,7 @@ import Order from '../customer/components/Order/Order'
 import OrderDetails from '../customer/components/Order/OrderDetails'
 import ScrollToTop from '../customer/components/ScrollToTop/ScrollToTop'
 import ErrorPage from '../customer/pages/ErrorPage/ErrorPage'
+import PaymentSuccess from '../customer/components/Payment/PaymentSuccess'
 const CustomerRouter = () => {
     return (
         <div>
@@ -28,6 +29,7 @@ const CustomerRouter = () => {
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path='/account/order' element={<Order />} />
                 <Route path='/account/order/:orderId' element={<OrderDetails />} />
+                <Route path='/payment/:orderId' element={<PaymentSuccess />} />
                 <Route path='*' element={<ErrorPage />} />
             </Routes>
 

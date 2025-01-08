@@ -264,7 +264,7 @@ export default function Navigation() {
               <div className="ml-4 flex lg:ml-0">
                 <img
                   onClick={() => navigate("/")}
-                  src="logo.webp"
+                  src="/logo.webp"
                   alt="OutfitOasis.com"
                   className="h-8 w-8 mr-2 cursor-pointer"
                   draggable="false"
