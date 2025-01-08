@@ -2,6 +2,7 @@ package outfitoasis.config;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,10 @@ import jakarta.servlet.http.HttpServletRequest;
 @Configuration
 @EnableWebSecurity
 public class AppConfig {
+
+    @Value("${FRONTEND_BASE_URL}")
+    String frontendBaseURL;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(management -> management.sessionCreationPolicy(
@@ -43,7 +48,7 @@ public class AppConfig {
             @Nullable
             public CorsConfiguration getCorsConfiguration(@NonNull HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                cfg.setAllowedOrigins(Collections.singletonList(frontendBaseURL));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setAllowCredentials(false);
