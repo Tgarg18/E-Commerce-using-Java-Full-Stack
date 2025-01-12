@@ -5,6 +5,7 @@ import OrderDetails from './customer/components/Order/OrderDetails'
 import { Route, Routes } from 'react-router-dom'
 import CustomerRouter from './Routers/CustomerRouter'
 import ScrollToTop from './customer/components/ScrollToTop/ScrollToTop'
+import AdminRouter from './Routers/AdminRouter'
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
     <div>
       <Routes>
         <Route path='/*' element={<CustomerRouter />} />
+        <Route path='/admin/*' element={<AdminRouter />} />
       </Routes>
     </div>
   )
