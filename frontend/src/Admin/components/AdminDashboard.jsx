@@ -3,6 +3,8 @@ import React from 'react'
 import Achievement from './Achievement';
 import MonthlyOverView from './MonthlyOverView';
 import ProductsTable from './ProductsTable';
+import OrdersTableView from '../view/OrderTableView';
+import ProductsTableView from '../view/ProductsTableView';
 
 const AdminDashboard = () => {
   return (
@@ -15,7 +17,10 @@ const AdminDashboard = () => {
           <MonthlyOverView />
         </Grid>
         <Grid item xs={12} md={6}>
-          <ProductsTable />
+          <OrdersTableView />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ProductsTableView />
         </Grid>
       </Grid>
     </div>

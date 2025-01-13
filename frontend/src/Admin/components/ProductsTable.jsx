@@ -67,7 +67,6 @@ const ProductsTable = () => {
           </Table>
         </TableContainer>
       </Card>
-
     </div>
   )
 }
