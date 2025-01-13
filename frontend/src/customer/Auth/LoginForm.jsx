@@ -5,11 +5,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../State/Auth/Action';
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-
-    const [error, setError] = useState("")
 
     const navigate = useNavigate();
 
@@ -18,12 +17,15 @@ const LoginForm = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        if (data.get('email') === "" || data.get('password') === "") {
+            toast.error("All fields are required");
+            return;
+        }
         const userData = {
             email: data.get('email'),
             password: data.get('password'),
         }
-        console.log("User Data: ", userData);
-        dispatch(login(userData));
+        dispatch(login(userData, toast));
     }
 
     return (

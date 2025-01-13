@@ -4,10 +4,11 @@ import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material';
 import ProductReviewCard from './ProductReviewCard';
 import { men_kurta } from '../../../Data/men_kurta';
 import ProductCard from '../Product/ProductCard';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { findProductsById } from '../../../State/Product/Action';
 import { addItemToCart } from '../../../State/Cart/Action';
+import { toast } from "react-toastify";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -16,19 +17,22 @@ function classNames(...classes) {
 export default function ProductDetails() {
     const [selectedSize, setSelectedSize] = useState(null);
 
-    const navigate = useNavigate();
     const params = useParams();
     const dispatch = useDispatch();
 
     const { products } = useSelector(store => store);
 
     const handleAddToCart = () => {
+        if (selectedSize==null) {
+            toast.error("Please select a size!");
+            return;
+        }
         const data = {
             productId: params.productId,
             size: selectedSize.name
         }
         dispatch(addItemToCart(data));
-        navigate('/cart');
+        toast.success("Product added to cart successfully!");
     };
 
     useEffect(() => {

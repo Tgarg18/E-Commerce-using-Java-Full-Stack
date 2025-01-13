@@ -23,15 +23,18 @@ const loginRequest = () => ({ type: LOGIN_REQUEST });
 const loginSuccess = (user) => ({ type: LOGIN_SUCCESS, payload: user });
 const loginFailure = (error) => ({ type: LOGIN_FAILURE, payload: error });
 
-export const login = (userData) => async (dispatch) => {
+export const login = (userData, toast) => async (dispatch) => {
     dispatch(loginRequest());
     try {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI}/auth/signin`, userData)
         const user = response.data;
-        if (user.jwt)
+        if (user.jwt) {
             localStorage.setItem('jwt', user.jwt);
-        dispatch(loginSuccess(user.jwt));
+            toast.success('Logged in successfully');
+            dispatch(loginSuccess(user.jwt));
+        }
     } catch (error) {
+        console.log(error);
         dispatch(loginFailure(error.message));
     }
 }

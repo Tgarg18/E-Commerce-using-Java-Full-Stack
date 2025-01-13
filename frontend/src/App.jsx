@@ -1,11 +1,9 @@
 import './App.css'
-import Checkout from './customer/components/Checkout/Checkout'
-import Order from './customer/components/Order/Order'
-import OrderDetails from './customer/components/Order/OrderDetails'
-import { Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import CustomerRouter from './Routers/CustomerRouter'
-import ScrollToTop from './customer/components/ScrollToTop/ScrollToTop'
 import AdminRouter from './Routers/AdminRouter'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -15,6 +13,7 @@ function App() {
         <Route path='/*' element={<CustomerRouter />} />
         <Route path='/admin/*' element={<AdminRouter />} />
       </Routes>
+      <ToastContainer />
     </div>
   )
 }

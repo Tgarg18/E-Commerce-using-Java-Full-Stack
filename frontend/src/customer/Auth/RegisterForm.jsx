@@ -5,12 +5,11 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, register } from '../../State/Auth/Action';
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
@@ -18,7 +17,7 @@ const RegisterForm = () => {
 
     const jwt = localStorage.getItem('jwt');
 
-    const {auth} = useSelector(store=>store);
+    const { auth } = useSelector(store => store);
 
     useEffect(() => {
         if (jwt)
@@ -27,9 +26,18 @@ const RegisterForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
         const data = new FormData(event.currentTarget);
+        if (!data.get('firstName') || !data.get('lastName') || !data.get('email') || !data.get('password') || !data.get('confirmPassword')) {
+            toast.error("All fields are required!");
+            return;
+        }
         if (data.get('password') !== data.get('confirmPassword')) {
-            setError("Passwords do not match");
+            toast.error("Password and confirm password do not match!");
+            return;
+        }
+        if (!passwordRegex.test(data.get('password'))) {
+            toast.error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character!");
             return;
         }
         const userData = {
@@ -37,7 +45,7 @@ const RegisterForm = () => {
             lastName: data.get('lastName'),
             email: data.get('email'),
             password: data.get('password'),
-        }
+        };
         console.log("User Data: ", userData);
         dispatch(register(userData));
     }
