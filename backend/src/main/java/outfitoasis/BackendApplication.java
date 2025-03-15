@@ -33,6 +33,8 @@ public class BackendApplication {
 		System.setProperty("SECRET_KEY", dotenv.get("SECRET_KEY"));
 		System.setProperty("RAZORPAY_API_KEY", dotenv.get("RAZORPAY_API_KEY"));
 		System.setProperty("RAZORPAY_API_SECRET", dotenv.get("RAZORPAY_API_SECRET"));
+		System.setProperty("SMTP_USERNAME", dotenv.get("SMTP_USERNAME"));
+		System.setProperty("SMTP_PASSWORD", dotenv.get("SMTP_PASSWORD"));
 
 		SpringApplication.run(BackendApplication.class, args);
 

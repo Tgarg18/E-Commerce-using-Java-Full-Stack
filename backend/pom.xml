@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>outfitoasis</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>backend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Spring Boot backend for OutfitOasis</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -111,6 +111,11 @@
 			<version>1.4.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 	</dependencies>
 	
 	<build>
@@ -121,6 +126,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
