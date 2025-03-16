@@ -25,7 +25,7 @@ public class Review {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_is")
+    @JoinColumn(name = "user_id")
     private User user;
 
     private LocalDateTime createdAt;

@@ -6,7 +6,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Button } from '@mui/material';
 
-const HomeSectionCarousel = ({data,sectionName}) => {
+const HomeSectionCarousel = ({ data, sectionName }) => {
     const responsive = {
         0: { items: 1.75 },
         720: { items: 3.25 },
@@ -18,7 +18,10 @@ const HomeSectionCarousel = ({data,sectionName}) => {
     const handleNext = () => setActiveIndex((prevIndex) => Math.min(prevIndex + 1, items.length - 1));
 
     const onSlideChange = ({ item }) => setActiveIndex(item);
-    const items = data.slice(0, 10).map((item, index) => <HomeSectionCard product={item} key={index} />);
+
+    const shuffledData = [...data].sort(() => Math.random() - 0.5);
+    const items = shuffledData.slice(0, 10).map((item, index) => <HomeSectionCard product={item} key={index} />);
+
     return (
         <div className=''>
             <h2 className='text-2xl font-extrabold text-gray-800 py-5'>{sectionName}</h2>

@@ -6,7 +6,7 @@ import { men_kurta } from '../../../Data/men_kurta';
 import ProductCard from '../Product/ProductCard';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { findProductsById } from '../../../State/Product/Action';
+import { findProducts, findProductsById } from '../../../State/Product/Action';
 import { addItemToCart } from '../../../State/Cart/Action';
 import { toast } from "react-toastify";
 
@@ -20,10 +20,17 @@ export default function ProductDetails() {
     const params = useParams();
     const dispatch = useDispatch();
 
+    const formatCategory = (str) => {
+        if (!str) return "";
+        return str
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, char => char.toUpperCase());
+    };
+
     const { products } = useSelector(store => store);
 
     const handleAddToCart = () => {
-        if (selectedSize==null) {
+        if (selectedSize == null) {
             toast.error("Please select a size!");
             return;
         }
@@ -41,6 +48,35 @@ export default function ProductDetails() {
         }
         dispatch(findProductsById(data));
     }, [params.productId]);
+
+    useEffect(() => {
+        const decodedQueryString = decodeURIComponent(location.search);
+
+        const searchParams = new URLSearchParams(decodedQueryString);
+        const priceValue = searchParams.get('price');
+        const discountValue = searchParams.get('discount');
+        const sortValue = searchParams.get('sort');
+        const pageNumber = searchParams.get('page') || 1;
+        const stock = searchParams.get('stock');
+        const [minPrice, maxPrice] = priceValue === null ? [0, 1000000] : priceValue.split('-').map(Number);
+
+        const data = {
+            category: products?.product?.data?.category?.name,
+            colors: [],
+            sizes: [],
+            minPrice,
+            maxPrice,
+            minDiscount: discountValue || 0,
+            sort: sortValue || 'price_low',
+            pageNumber: pageNumber - 1,
+            pageSize: 30,
+            stock: stock,
+        }
+
+        dispatch(findProducts(data));
+
+    }, [products?.product?.data?.category?.id]);
+
 
     return (
         <div className="bg-white lg:px-20">
@@ -67,10 +103,13 @@ export default function ProductDetails() {
                             </li>
                         ))}
                         <li className="text-sm">
-                            <a href={""} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                                {/* {products?.product?.data?.brand} */}
-                                To do: Men/Clothing/Men Kurta
-                            </a>
+                            <span aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                                {formatCategory(products?.product?.data?.category?.parentCategory?.parentCategory?.name)}
+                                {products?.product?.data?.category?.parentCategory?.name && " / "}
+                                {formatCategory(products?.product?.data?.category?.parentCategory?.name)}
+                                {products?.product?.data?.category?.name && " / "}
+                                {formatCategory(products?.product?.data?.category?.name)}
+                            </span>
                         </li>
                     </ol>
                 </nav>
@@ -282,7 +321,7 @@ export default function ProductDetails() {
                     <h1 className='font-bold text-xl py-5'>Similar Products</h1>
                     <div className='flex flex-wrap space-y-5'>
                         {
-                            men_kurta.map((item, index) => {
+                            products.products && products.products?.content?.map((item, index) => {
                                 return <ProductCard product={item} key={index} />;
                             })
                         }

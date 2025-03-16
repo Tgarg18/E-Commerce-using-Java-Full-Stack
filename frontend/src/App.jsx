@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import CustomerRouter from './Routers/CustomerRouter'
 import AdminRouter from './Routers/AdminRouter'
 import { ToastContainer } from 'react-toastify';
