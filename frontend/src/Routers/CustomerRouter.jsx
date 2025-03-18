@@ -22,6 +22,8 @@ const CustomerRouter = () => {
             <Routes>
                 <Route path='/login' element={<HomePage />} />
                 <Route path='/signup' element={<HomePage />} />
+                <Route path='/verify-otp-signin' element={<HomePage />} />
+                <Route path='/verify-otp-signup' element={<HomePage />} />
                 <Route path='/' element={<HomePage />} />
                 <Route path='/:levelOne/:levelTwo/:levelThree' element={<Product />} />
                 <Route path='/product/:productId' element={<ProductDetails />} />

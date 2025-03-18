@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, Box } from '@mui/material'
 import RegisterForm from './RegisterForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import VerifyOtpSignin from './VerifyOtpSignin';
+import VerifyOtpSignup from './VerifyOtpSignup';
+import { AuthContext } from '../../context/AuthContext';
 
 const style = {
   position: 'absolute',
@@ -22,26 +25,45 @@ const AuthModal = ({ handleClose, open }) => {
 
   const navigate = useNavigate();
 
+  const [modalData, setModalData] = useState(null);
+
   return (
     <div>
-      <Modal
-        open={open}
-        onClose={() => {
-          handleClose();
-          navigate('/');
-        }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          {
-            location.pathname === '/login' ?
-              <LoginForm />
-              :
-              <RegisterForm />
-          }
-        </Box>
-      </Modal>
+      <AuthContext.Provider value={{ modalData, setModalData }}>
+        <Modal
+          open={open}
+          onClose={() => {
+            setModalData(null);
+            handleClose();
+            navigate('/');
+          }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {
+              location.pathname === '/login' ?
+                <LoginForm setModalData={setModalData} />
+                : (
+                  location.pathname === '/signup' ?
+                    <RegisterForm setModalData={setModalData} />
+                    :
+                    (
+                      location.pathname === '/verify-otp-signin' ?
+                        <VerifyOtpSignin modalData={modalData} />
+                        :
+                        (
+                          location.pathname === '/verify-otp-signup' ?
+                            <VerifyOtpSignup modalData={modalData} />
+                            :
+                            null
+                        )
+                    )
+                )
+            }
+          </Box>
+        </Modal>
+      </AuthContext.Provider>
     </div>
   )
 }

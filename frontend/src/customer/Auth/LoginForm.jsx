@@ -4,10 +4,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login } from '../../State/Auth/Action';
+import { sendLoginOtp } from '../../State/Auth/Action';
 import { toast } from "react-toastify";
 
-const LoginForm = () => {
+const LoginForm = ({ setModalData }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
@@ -25,7 +25,10 @@ const LoginForm = () => {
             email: data.get('email'),
             password: data.get('password'),
         }
-        dispatch(login(userData, toast));
+        setModalData({
+            email: data.get('email'),
+        });
+        dispatch(sendLoginOtp(userData, toast, navigate));
     }
 
     return (

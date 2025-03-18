@@ -4,12 +4,13 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, register } from '../../State/Auth/Action';
+import { getUser, sendSignupOtp } from '../../State/Auth/Action';
 import { toast } from "react-toastify";
 
-const RegisterForm = () => {
+const RegisterForm = ({ setModalData }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -47,7 +48,8 @@ const RegisterForm = () => {
             password: data.get('password'),
         };
         console.log("User Data: ", userData);
-        dispatch(register(userData));
+        setModalData(userData);
+        dispatch(sendSignupOtp(userData, navigate));
     }
 
     return (
