@@ -4,11 +4,12 @@ import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material';
 import ProductReviewCard from './ProductReviewCard';
 import { men_kurta } from '../../../Data/men_kurta';
 import ProductCard from '../Product/ProductCard';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { findProducts, findProductsById } from '../../../State/Product/Action';
 import { addItemToCart } from '../../../State/Cart/Action';
 import { toast } from "react-toastify";
+import ProductModal from './ProductModal';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -16,9 +17,19 @@ function classNames(...classes) {
 
 export default function ProductDetails() {
     const [selectedSize, setSelectedSize] = useState(null);
+    const [openProductModal, setOpenProductModal] = useState(false);
 
     const params = useParams();
     const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
+    const handleOpen = () => {
+        setOpenProductModal(true);
+    };
+    const handleClose = () => {
+        setOpenProductModal(false);
+    };
 
     const formatCategory = (str) => {
         if (!str) return "";
@@ -76,7 +87,6 @@ export default function ProductDetails() {
         dispatch(findProducts(data));
 
     }, [products?.product?.data?.category?.id]);
-
 
     return (
         <div className="bg-white lg:px-20">
@@ -152,10 +162,26 @@ export default function ProductDetails() {
                             {/* Reviews */}
                             <div className="mt-6">
                                 <div className='flex items-center space-x-3'>
-                                    <Rating name="read-only" value={4.5} precision={0.5} readOnly />
-                                    <p className="opacity-50 text-sm">56540 Ratings</p>
-                                    <p className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">3870 Reviews</p>
+                                    {(() => {
+                                        const ratingsArray = [
+                                            ...(products?.product?.data?.ratings || []),
+                                            ...(products?.product?.data?.reviews?.map(r => ({ rating: r.rating })) || [])
+                                        ];
+                                        const totalRatings = ratingsArray.length || 1;
+                                        const averageRating = ratingsArray.reduce((sum, r) => sum + r.rating, 0) / totalRatings;
+
+                                        return (
+                                            <>
+                                                <Rating name="read-only" value={averageRating} precision={0.5} readOnly />
+                                                <p className="opacity-50 text-sm">{ratingsArray.length} Ratings</p>
+                                                <p className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                                    {products.product?.data?.reviews?.length || 0} Reviews
+                                                </p>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
+
                             </div>
 
                             <form className="mt-10">
@@ -254,66 +280,95 @@ export default function ProductDetails() {
 
                 {/* Ratings and Reviews */}
                 <section>
-                    <h1 className='font-semibold text-lg pb-4'>Recent Review & Rating</h1>
+                    <div className='font-semibold text-lg mb-4 flex items-center gap-5'>
+                        <h1>Recent Review & Rating</h1>
+                        <Button onClick={() => {
+                            handleOpen();
+                            navigate(`/product/${products?.product?.data?.id}/addReview`);
+                        }} color='secondary' variant='contained' sx={{ px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}>
+                            Add Review
+                        </Button>
+                        <Button onClick={() => {
+                            handleOpen();
+                            navigate(`/product/${products?.product?.data?.id}/addRating`);
+                        }} color='secondary' variant='contained' sx={{ px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}>
+                            Add Rating
+                        </Button>
+                    </div>
                     <div className='border p-5'>
                         <Grid container spacing={7}>
                             <Grid item xs={7}>
-                                <div className='space-y-5'>
-                                    {[1, 1, 1, 1].map((item, index) => <ProductReviewCard key={index} />)}
-
+                                <div className='space-y-5 h-full w-full'>
+                                    {products?.product?.data?.reviews && products?.product?.data?.reviews?.length === 0 && <div className='flex items-center justify-center h-full w-full'><p className='font-semibold'>No Reviews on this Product.</p></div>}
+                                    {products?.product?.data?.reviews && products?.product?.data?.reviews?.length > 0 && products?.product?.data?.reviews?.map((review, index) => (
+                                        <ProductReviewCard key={index} review={review} />
+                                    ))}
                                 </div>
                             </Grid>
                             <Grid item xs={5}>
                                 <h1 className='text-xl font-semibold pb-2'>Product Ratings</h1>
                                 <div className='flex items-center space-x-3'>
-                                    <Rating name="read-only" value={4.6} precision={0.5} readOnly />
-                                    <p className='opacity-60'>54890 Ratings</p>
+                                    {/* Merge ratings from both ratings and reviews arrays */}
+                                    {(() => {
+                                        const ratingsArray = [
+                                            ...(products?.product?.data?.ratings || []),
+                                            ...(products?.product?.data?.reviews?.map(r => ({ rating: r.rating })) || [])
+                                        ];
+                                        const totalRatings = ratingsArray.length || 0;
+                                        const averageRating = ratingsArray.reduce((sum, r) => sum + r.rating, 0) / totalRatings;
+
+                                        return (
+                                            <>
+                                                <Rating name="read-only" value={averageRating} precision={0.5} readOnly />
+                                                <p className='opacity-60'>{totalRatings} Ratings</p>
+                                            </>
+                                        );
+                                    })()}
                                 </div>
+
+                                {/* Rating Distribution */}
                                 <Box className='mt-5 space-y-3'>
-                                    <Grid container alignItems="center" gap={2}>
-                                        <Grid item xs={2}>
-                                            <p className=''>Excellent</p>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={40} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#4CAF50' } }} />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container alignItems="center" gap={2}>
-                                        <Grid item xs={2}>
-                                            <p>Very Good</p>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={30} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#8BC34A' } }} />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container alignItems="center" gap={2}>
-                                        <Grid item xs={2}>
-                                            <p>Good</p>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={25} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#FFD700' } }} />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container alignItems="center" gap={2}>
-                                        <Grid item xs={2}>
-                                            <p>Average</p>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={20} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#FF9800' } }} />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container alignItems="center" gap={2}>
-                                        <Grid item xs={2}>
-                                            <p>Poor</p>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                            <LinearProgress variant='determinate' value={10} sx={{ bgcolor: '#d0d0d0', borderRadius: 4, height: 7, '& .MuiLinearProgress-bar': { backgroundColor: '#F44336' } }} />
-                                        </Grid>
-                                    </Grid>
+                                    {[
+                                        { label: "Excellent", value: 5, color: "#4CAF50" },
+                                        { label: "Very Good", value: 4, color: "#8BC34A" },
+                                        { label: "Good", value: 3, color: "#FFD700" },
+                                        { label: "Average", value: 2, color: "#FF9800" },
+                                        { label: "Poor", value: 1, color: "#F44336" }
+                                    ].map(({ label, value, color }) => {
+                                        const ratingsArray = [
+                                            ...(products?.product?.data?.ratings || []),
+                                            ...(products?.product?.data?.reviews?.map(r => ({ rating: r.rating })) || [])
+                                        ];
+                                        const totalRatings = ratingsArray.length || 1;
+                                        const count = ratingsArray.filter(r => r.rating === value).length || 0;
+                                        const percentage = (count / totalRatings) * 100;
+
+                                        return (
+                                            <Grid container alignItems="center" gap={2} key={label}>
+                                                <Grid item xs={2}>
+                                                    <p>{label}</p>
+                                                </Grid>
+                                                <Grid item xs={7}>
+                                                    <LinearProgress
+                                                        variant='determinate'
+                                                        value={percentage}
+                                                        sx={{
+                                                            bgcolor: '#d0d0d0',
+                                                            borderRadius: 4,
+                                                            height: 7,
+                                                            '& .MuiLinearProgress-bar': { backgroundColor: color }
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        );
+                                    })}
                                 </Box>
                             </Grid>
                         </Grid>
+
                     </div>
+                    <ProductModal handleClose={handleClose} open={openProductModal} productId={products?.product?.data?.id} />
                 </section>
 
                 {/* Similar products */}

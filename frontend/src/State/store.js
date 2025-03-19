@@ -5,6 +5,8 @@ import { customerProductReducer } from './Product/Reducer';
 import { cartReducer } from './Cart/Reducer';
 import { orderReducer } from './Order/Reducer';
 import adminOrderReducer from './Admin/Order/Reducer';
+import ratingReducer from './Rating/Reducer';
+import reviewReducer from './Review/Reducer';
 
 const rootReducers = combineReducers({
     auth: authReducer,
@@ -12,6 +14,8 @@ const rootReducers = combineReducers({
     cart: cartReducer,
     order: orderReducer,
     adminOrder: adminOrderReducer,
+    rating: ratingReducer,
+    review: reviewReducer,
 })
 
 export const store = legacy_createStore(rootReducers, applyMiddleware(thunk));

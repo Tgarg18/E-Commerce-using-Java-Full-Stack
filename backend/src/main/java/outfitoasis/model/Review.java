@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,9 @@ public class Review {
     private Long id;
 
     private String review;
+
+    @Column(name = "rating")
+    private double rating;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -34,12 +38,21 @@ public class Review {
 
     }
 
-    public Review(Long id, String review, Product product, User user, LocalDateTime createdAt) {
+    public Review(Long id, String review, double rating, Product product, User user, LocalDateTime createdAt) {
         this.id = id;
         this.review = review;
+        this.rating = rating;
         this.product = product;
         this.user = user;
         this.createdAt = createdAt;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public Long getId() {

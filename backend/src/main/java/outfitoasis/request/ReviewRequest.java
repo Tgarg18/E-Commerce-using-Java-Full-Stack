@@ -4,14 +4,24 @@ public class ReviewRequest {
 
     private Long productId;
     private String review;
+    private double rating;
 
     public ReviewRequest() {
 
     }
 
-    public ReviewRequest(Long productId, String review) {
+    public ReviewRequest(Long productId, String review, double rating) {
         this.productId = productId;
         this.review = review;
+        this.rating = rating;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public Long getProductId() {
@@ -29,5 +39,5 @@ public class ReviewRequest {
     public void setReview(String review) {
         this.review = review;
     }
-    
+
 }

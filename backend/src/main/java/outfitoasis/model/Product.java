@@ -62,7 +62,7 @@ public class Product {
     @Column(name = "num_ratings")
     private int num_Ratings;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
