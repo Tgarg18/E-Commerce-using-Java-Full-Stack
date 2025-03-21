@@ -35,6 +35,9 @@ public class BackendApplication {
 		System.setProperty("RAZORPAY_API_SECRET", dotenv.get("RAZORPAY_API_SECRET"));
 		System.setProperty("SMTP_USERNAME", dotenv.get("SMTP_USERNAME"));
 		System.setProperty("SMTP_PASSWORD", dotenv.get("SMTP_PASSWORD"));
+		System.setProperty("GOOGLE_CLIENT_ID", dotenv.get("GOOGLE_CLIENT_ID"));
+		System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
+		System.setProperty("GOOGLE_REDIRECT_URI", dotenv.get("GOOGLE_REDIRECT_URI"));
 
 		SpringApplication.run(BackendApplication.class, args);
 

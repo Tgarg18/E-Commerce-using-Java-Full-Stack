@@ -1,7 +1,9 @@
 package outfitoasis.controller;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+
 import outfitoasis.config.JwtProvider;
 import outfitoasis.exception.UserException;
 import outfitoasis.model.User;
 import outfitoasis.repository.UserRepository;
+import outfitoasis.request.GoogleAuthRequest;
 import outfitoasis.request.LoginRequest;
 import outfitoasis.response.AuthResponse;
 import outfitoasis.service.AuthService;
@@ -36,6 +44,9 @@ public class AuthController {
     private CartService cartService;
     private AuthService authService;
 
+    @Value("${GOOGLE_CLIENT_ID}")
+    String GoogleClientId;
+
     AuthController(UserRepository userRepository, CustomUserServiceImplementation customUserServiceImplementation,
             PasswordEncoder passwordEncoder, JwtProvider jwtProvider, CartService cartService,
             AuthService authService) {
@@ -45,6 +56,52 @@ public class AuthController {
         this.jwtProvider = jwtProvider;
         this.cartService = cartService;
         this.authService = authService;
+    }
+
+    @SuppressWarnings("deprecation")
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(@RequestBody GoogleAuthRequest googleAuthRequest) {
+        try {
+            System.out.println(GoogleClientId);
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                    new NetHttpTransport(),
+                    new JacksonFactory())
+                    .setAudience(Collections.singletonList(GoogleClientId))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(googleAuthRequest.getToken());
+
+            if (idToken == null) {
+                return new ResponseEntity<>(new AuthResponse(null, "Invalid Google token"), HttpStatus.UNAUTHORIZED);
+            }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+            String firstName = (String) payload.get("given_name");
+            String lastName = (String) payload.get("family_name");
+
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                user = new User();
+                user.setEmail(email);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setPassword(passwordEncoder.encode("GOOGLE_AUTH_USER"));
+                user.setCreatedAt(LocalDateTime.now());
+                user = userRepository.save(user);
+                cartService.createCart(user);
+            }
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("I am here");
+            String token = jwtProvider.generateToken(authentication);
+
+            return new ResponseEntity<>(new AuthResponse(token, "Google Sign-In Successful"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AuthResponse(null, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/signup")
@@ -106,7 +163,7 @@ public class AuthController {
         if (!passwordEncoder.matches(password, existingUser.getPassword()))
             return new ResponseEntity<>(new AuthResponse(null, "Invalid password"), HttpStatus.UNAUTHORIZED);
 
-            authService.sendOtp(email);
+        authService.sendOtp(email);
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("OTP sent to your email. Please verify.");
