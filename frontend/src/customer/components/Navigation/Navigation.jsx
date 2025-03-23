@@ -471,7 +471,7 @@ export default function Navigation() {
                       aria-hidden="true"
                     />
                     {
-                      cart?.cart?.totalItem !== 0 ?
+                      cart?.cart && cart?.cart?.totalItem && cart?.cart?.totalItem !== 0 ?
                         <span className="absolute inline-flex items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-4 text-white top-0 right-0">
                           {cart?.cart?.totalItem}
                         </span>
