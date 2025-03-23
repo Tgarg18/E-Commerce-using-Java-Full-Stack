@@ -190,4 +190,44 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
+    @PostMapping("/forgot-password-initiate")
+    public ResponseEntity<AuthResponse> initiateForgotPassword(@RequestParam String email) throws UserException {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+            throw new UserException("Email not registered. Try Logging in.");
+
+        authService.sendOtp(email);
+
+        AuthResponse response = new AuthResponse();
+        response.setMessage("OTP sent to " + email + ". Please verify to reset password.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password-verify")
+    public ResponseEntity<AuthResponse> verifyOtpAndResetPassword(@RequestParam String email, @RequestParam String otp) {
+        boolean isValid = authService.validateOtp(email, otp);
+
+        if (!isValid)
+            return new ResponseEntity<>(new AuthResponse(null, "Invalid or expired OTP"), HttpStatus.UNAUTHORIZED);
+
+        AuthResponse response = new AuthResponse();
+        response.setMessage("Redirecting to password change page.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<AuthResponse> resetPassword(@RequestParam String email, @RequestParam String password) {
+        User user = userRepository.findByEmail(email);
+        
+        if(user == null)
+            return new ResponseEntity<>(new AuthResponse(null, "Email not registered"), HttpStatus.NOT_FOUND);
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+
+        AuthResponse response = new AuthResponse();
+        response.setMessage("Password reset successful. Please login with new password.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

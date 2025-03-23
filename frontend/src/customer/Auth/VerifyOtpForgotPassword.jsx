@@ -2,10 +2,10 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { verifyLoginOtp } from '../../State/Auth/Action';
 import { toast } from "react-toastify";
+import { verifyForgotPasswordOtp } from '../../State/ForgotPassword/Action';
 
-const VerifyOtpSignin = ({ modalData }) => {
+const VerifyOtpForgotPassword = ({ modalData }) => {
     const [seconds, setSeconds] = useState(60);  // dynamic krna hai isko abhi
     const timerRef = useRef(null);
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const VerifyOtpSignin = ({ modalData }) => {
             toast.warning("Fill in OTP!");
             return;
         }
-        dispatch(verifyLoginOtp(modalData.email, otp, toast, navigate));
+        dispatch(verifyForgotPasswordOtp(modalData?.email, otp, navigate, toast));
     };
 
     return (
@@ -82,12 +82,12 @@ const VerifyOtpSignin = ({ modalData }) => {
             </form>
 
             <div className='flex justify-center items-center text-sm'>
-                <p onClick={() => navigate("/signup")} className='cursor-pointer mt-5 hover:underline'>
-                    OTP expired or not received ? Try to Login Again
+                <p onClick={() => navigate("/forgot-password")} className='cursor-pointer mt-5 hover:underline'>
+                    OTP expired or not received ? Try Again
                 </p>
             </div>
         </div>
     );
 };
 
-export default VerifyOtpSignin;
+export default VerifyOtpForgotPassword;

@@ -1,48 +1,42 @@
-import { Button, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Button, TextField, IconButton, InputAdornment } from '@mui/material';
 import React, { useState } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { sendLoginOtp } from '../../State/Auth/Action';
 import { toast } from "react-toastify";
-import ContinueWithGoogleButton from './ContinueWithGoogleButton';
+import { setNewPassword } from '../../State/ForgotPassword/Action';
 
-const LoginForm = ({ setModalData }) => {
+const NewPasswordForm = ({ modalData }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (data.get('email') === "" || data.get('password') === "") {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        if (data.get('cpassword') === "" || data.get('password') === "") {
             toast.error("All fields are required");
             return;
         }
-        const userData = {
-            email: data.get('email'),
-            password: data.get('password'),
-        };
-        setModalData({
-            email: data.get('email'),
-        });
-        dispatch(sendLoginOtp(userData, toast, navigate));
+        if (data.get('cpassword') !== data.get('password')) {
+            toast.error("Passwords do not match");
+            return;
+        }
+        if (!passwordRegex.test(data.get('password'))) {
+            toast.error('Password must be at least 8 characters long and contain an uppercase letter, lowercase letter, number, and special character!');
+            return;
+        }
+        dispatch(setNewPassword(modalData?.email, data.get('password'), navigate, toast));
     };
 
     return (
         <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 space-y-4">
-            <h2 className="text-2xl font-semibold text-center text-gray-800">Login</h2>
+            <h2 className="text-2xl font-semibold text-center text-gray-800">Set New Password</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <TextField
-                    required
-                    id='email'
-                    name='email'
-                    label='Email'
-                    fullWidth
-                    autoComplete='email'
-                    variant="outlined"
-                />
+                
                 <TextField
                     required
                     type={showPassword ? 'text' : 'password'}
@@ -50,13 +44,30 @@ const LoginForm = ({ setModalData }) => {
                     name='password'
                     label='Password'
                     fullWidth
-                    autoComplete='password'
                     variant="outlined"
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton onClick={() => setShowPassword(!showPassword)}>
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }}
+                />
+                <TextField
+                    required
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id='cpassword'
+                    name='cpassword'
+                    label='Confirm Password'
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
                         )
@@ -72,28 +83,16 @@ const LoginForm = ({ setModalData }) => {
                         ':hover': { bgcolor: "#7E3AF2" }
                     }}
                 >
-                    Login
+                    Set Password
                 </Button>
             </form>
 
             <div className='flex justify-center items-center text-sm'>
-                <p onClick={() => navigate("/forgot-password")} className='hover:underline cursor-pointer'>Forgot Password?</p>
+                <p onClick={() => navigate("/login")} className='hover:underline cursor-pointer mt-2'>Remembered your password? Login</p>
             </div>
 
-            <div className="flex items-center my-4">
-                <hr className="flex-grow border-gray-300" />
-                <span className="px-3 text-gray-500 text-sm font-medium">OR</span>
-                <hr className="flex-grow border-gray-300" />
-            </div>
-
-            <div className='flex justify-center'>
-                <ContinueWithGoogleButton />
-            </div>
-            <div className='flex justify-center items-center text-sm'>
-                <p onClick={() => navigate("/signup")} className='hover:underline cursor-pointer mt-2'>Don't have an account? Sign up</p>
-            </div>
         </div>
     );
 };
 
-export default LoginForm;
+export default NewPasswordForm;

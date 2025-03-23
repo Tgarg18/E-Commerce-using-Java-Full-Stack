@@ -24,6 +24,9 @@ const CustomerRouter = () => {
                 <Route path='/signup' element={<HomePage />} />
                 <Route path='/verify-otp-signin' element={<HomePage />} />
                 <Route path='/verify-otp-signup' element={<HomePage />} />
+                <Route path='/forgot-password' element={<HomePage />} />
+                <Route path='/verify-forgot-password' element={<HomePage />} />
+                <Route path='/forgot-password-new-password' element={<HomePage />} />
                 <Route path='/' element={<HomePage />} />
                 <Route path='/:levelOne/:levelTwo/:levelThree' element={<Product />} />
                 <Route path='/product/:productId' element={<ProductDetails />} />

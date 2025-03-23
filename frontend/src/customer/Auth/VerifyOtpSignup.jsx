@@ -83,7 +83,7 @@ const VerifyOtpSignup = ({ modalData }) => {
                 </Grid>
             </form>
 
-            <div className='flex justify-center items-center'>
+            <div className='flex justify-center items-center text-sm'>
                 <p onClick={() => navigate("/signup")} className='cursor-pointer mt-5 hover:underline'>
                     OTP expired or not received ? Try to Login Again
                 </p>

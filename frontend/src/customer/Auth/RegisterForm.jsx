@@ -133,7 +133,7 @@ const RegisterForm = ({ setModalData }) => {
                 <div className="flex justify-center my-4">
                     <ContinueWithGoogleButton />
                 </div>
-                <div className='flex justify-center items-center'>
+                <div className='flex justify-center items-center text-sm'>
                     <p onClick={() => navigate("/login")} className='hover:underline cursor-pointer mt-2'>Already have an account? Login</p>
                 </div>
             </div>

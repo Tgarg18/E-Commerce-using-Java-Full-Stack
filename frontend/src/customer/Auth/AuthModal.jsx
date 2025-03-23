@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
-import { Modal, Box } from '@mui/material'
-import RegisterForm from './RegisterForm';
+import React, { useState } from 'react';
+import { Modal, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { AuthContext } from '../../context/AuthContext';
+import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import VerifyOtpSignin from './VerifyOtpSignin';
 import VerifyOtpSignup from './VerifyOtpSignup';
-import { AuthContext } from '../../context/AuthContext';
+import ForgotPasswordForm from './ForgotPasswordForm';
+import VerifyOtpForgotPassword from './VerifyOtpForgotPassword';
+import NewPasswordForm from './NewPasswordForm';
 
 const style = {
   position: 'absolute',
@@ -20,52 +24,38 @@ const style = {
 };
 
 const AuthModal = ({ handleClose, open }) => {
-
   const location = useLocation();
-
   const navigate = useNavigate();
-
   const [modalData, setModalData] = useState(null);
 
-  return (
-    <div>
-      <AuthContext.Provider value={{ modalData, setModalData }}>
-        <Modal
-          open={open}
-          onClose={() => {
-            setModalData(null);
-            handleClose();
-            navigate('/');
-          }}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            {
-              location.pathname === '/login' ?
-                <LoginForm setModalData={setModalData} />
-                : (
-                  location.pathname === '/signup' ?
-                    <RegisterForm setModalData={setModalData} />
-                    :
-                    (
-                      location.pathname === '/verify-otp-signin' ?
-                        <VerifyOtpSignin modalData={modalData} />
-                        :
-                        (
-                          location.pathname === '/verify-otp-signup' ?
-                            <VerifyOtpSignup modalData={modalData} />
-                            :
-                            null
-                        )
-                    )
-                )
-            }
-          </Box>
-        </Modal>
-      </AuthContext.Provider>
-    </div>
-  )
-}
+  const modalComponents = {
+    '/login': <LoginForm setModalData={setModalData} />,
+    '/signup': <RegisterForm setModalData={setModalData} />,
+    '/verify-otp-signin': <VerifyOtpSignin modalData={modalData} />,
+    '/verify-otp-signup': <VerifyOtpSignup modalData={modalData} />,
+    '/forgot-password': <ForgotPasswordForm setModalData={setModalData} />,
+    '/verify-forgot-password': <VerifyOtpForgotPassword modalData={modalData} />,
+    '/forgot-password-new-password': <NewPasswordForm modalData={modalData} />,
+  };
 
-export default AuthModal
+  const renderComponent = modalComponents[location.pathname] || null;
+
+  return (
+    <AuthContext.Provider value={{ modalData, setModalData }}>
+      <Modal
+        open={open}
+        onClose={() => {
+          setModalData(null);
+          handleClose();
+          navigate('/');
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>{renderComponent}</Box>
+      </Modal>
+    </AuthContext.Provider>
+  );
+};
+
+export default AuthModal;
