@@ -46,7 +46,7 @@ const RegisterForm = ({ setModalData }) => {
             password: data.get('password'),
         };
 
-        console.log('User Data: ', userData);
+        setModalData(null);
         setModalData(userData);
         dispatch(sendSignupOtp(userData, navigate));
     };

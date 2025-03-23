@@ -18,6 +18,7 @@ const ForgotPasswordForm = ({ setModalData }) => {
             toast.warning("Please enter your email!");
             return;
         }
+        setModalData(null);
         setModalData({ email });
         dispatch(sendForgotPasswordOtp(email, navigate, toast));
         setLoading(false);

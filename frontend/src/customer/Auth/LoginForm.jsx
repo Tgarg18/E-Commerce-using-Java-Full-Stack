@@ -24,6 +24,7 @@ const LoginForm = ({ setModalData }) => {
             email: data.get('email'),
             password: data.get('password'),
         };
+        setModalData(null);
         setModalData({
             email: data.get('email'),
         });
