@@ -1,31 +1,20 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { continueWithGoogle } from "../../State/ContinueWithGoogle/Action";
 
 const ContinueWithGoogleButton = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URI}/auth/google`, {
-        token: credentialResponse.credential,
-      });
-      console.log(response.data);
-      localStorage.setItem("jwt", response.data.jwt);
-      toast.success("Google Sign-In Successful!");
-      navigate("/");
-    } catch (error) {
-      console.error("Google Authentication Failed", error);
-      toast.error("Authentication Failed");
-      navigate("/login");
-    }
+    dispatch(continueWithGoogle(credentialResponse, navigate, toast));
   };
 
   const handleError = () => {
     console.error("Google Login Failed");
-    alert("Google Login Failed");
+    toast.error("Google Login Failed");
   };
 
   return (
