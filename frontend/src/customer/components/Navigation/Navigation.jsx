@@ -2,10 +2,9 @@ import { Fragment, useEffect, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
-  MagnifyingGlassIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { navigation } from "./navigationData";
@@ -16,6 +15,7 @@ import { getUser, logout } from "../../../State/Auth/Action";
 import { toast } from "react-toastify";
 import { getCart } from "../../../State/Cart/Action";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -69,7 +69,7 @@ export default function Navigation() {
 
   useEffect(() => {
     dispatch(getCart());
-  }, [cart.updateCartItem,cart.deleteCartItem,cart.addItemToCart])
+  }, [cart.updateCartItem, cart.deleteCartItem, cart.addItemToCart])
 
   const handleLogout = () => {
     localStorage.clear();
@@ -218,16 +218,60 @@ export default function Navigation() {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <span
-                      className="-m-2 block p-2 font-medium text-gray-900 cursor-pointer hover:text-blue-500"
-                      onClick={() => {
-                        setOpen(false);
-                        handleOpen();
-                        navigate('/login');
-                      }}
-                    >
-                      Sign in
-                    </span>
+                    {auth?.user?.firstName ?
+                      <div className="flex flex-col justify-content-start items-start w-full">
+                        <Button onClick={() => {
+                          setOpen(false);
+                          navigate('/my-profile');
+                        }} sx={{
+                          display: 'flex', alignItems: 'center',
+                          justifyContent: 'space-between', width: '100%',
+                          color: 'black',
+                        }}>
+                          Profile
+                          <Avatar
+                            className="text-white"
+                            aria-controls={open ? "basic-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            sx={{
+                              bgcolor: deepPurple[500],
+                              color: "white",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {auth.user?.firstName[0].toUpperCase()}
+                          </Avatar>
+                        </Button>
+                        <Button onClick={() => {
+                          setOpen(false);
+                          navigate('/account/order');
+                        }} sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'black' }}>
+                          My Orders
+                        </Button>
+                        <div className="w-full border-t border-gray-200 mt-4">
+                          <Button onClick={() => {
+                            handleLogout();
+                            setOpen(false);
+                          }} sx={{ color: "red", width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2rem' }}>
+                            Logout
+                            <LogoutIcon fontSize="large" color="black" />
+                          </Button>
+                        </div>
+                      </div>
+                      :
+                      (
+                        <span
+                          className="-m-2 block p-2 font-medium text-gray-900 cursor-pointer hover:text-blue-500"
+                          onClick={() => {
+                            setOpen(false);
+                            handleOpen();
+                            navigate('/login');
+                          }}
+                        >
+                          Sign in
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -425,13 +469,16 @@ export default function Navigation() {
                           "aria-labelledby": "basic-button",
                         }}
                       >
-                        <MenuItem onClick={handleCloseUserMenu}>
+                        <MenuItem onClick={() => {
+                          navigate('/my-profile')
+                          handleCloseUserMenu()
+                        }}>
                           Profile
                         </MenuItem>
                         <MenuItem onClick={() => navigate('/account/order')}>
                           My Orders
                         </MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        <MenuItem onClick={handleLogout} sx={{ color: "red" }}>Logout</MenuItem>
                       </Menu>
                     </div>
                   ) : (

@@ -12,6 +12,7 @@ import OrderDetails from '../customer/components/Order/OrderDetails'
 import ScrollToTop from '../customer/components/ScrollToTop/ScrollToTop'
 import ErrorPage from '../customer/pages/ErrorPage/ErrorPage'
 import PaymentSuccess from '../customer/components/Payment/PaymentSuccess'
+import Profile from '../customer/components/Profile/Profile'
 const CustomerRouter = () => {
     return (
         <div>
@@ -22,6 +23,7 @@ const CustomerRouter = () => {
             <Routes>
                 <Route path='/login' element={<HomePage />} />
                 <Route path='/signup' element={<HomePage />} />
+                <Route path='/my-profile' element={<Profile />} />
                 <Route path='/verify-otp-signin' element={<HomePage />} />
                 <Route path='/verify-otp-signup' element={<HomePage />} />
                 <Route path='/forgot-password' element={<HomePage />} />
