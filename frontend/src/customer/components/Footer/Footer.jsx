@@ -12,8 +12,8 @@ const Footer = () => {
             links: ["Marketing", "Analytics", "Commerce", "Insights", "Support"],
         },
         {
-            title: "Documentation",
-            links: ["Guides", "API Status"],
+            title: "Social",
+            links: ["Instagram", "X", "Facebook", "Youtube"],
         },
         {
             title: "Legal",

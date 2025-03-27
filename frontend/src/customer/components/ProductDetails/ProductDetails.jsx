@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material';
 import ProductReviewCard from './ProductReviewCard';
-import { men_kurta } from '../../../Data/men_kurta';
 import ProductCard from '../Product/ProductCard';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

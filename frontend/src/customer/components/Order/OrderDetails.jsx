@@ -1,42 +1,75 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AddressCard from '../AddessCard/AddressCard'
 import OrderTracker from './OrderTracker'
-import { Box, Grid } from '@mui/material'
+import { Box, Button, Grid } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrderById } from '../../../State/Order/Action'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const OrderDetails = () => {
+
+    const { orderId } = useParams();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { order } = useSelector(store => store);
+
+    useEffect(() => {
+        dispatch(getOrderById(orderId));
+    }, [orderId]);
+
+    const orderStatus = {
+        PLACED: 1,
+        CONFIRMED: 2,
+        SHIPPED: 4,
+        DELIVERED: 5,
+        CANCELLED: 0
+    }
+
     return (
         <div className='ps-5 lg:px-20'>
+            <Button
+                color='secondary' variant='contained' sx={{ px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}
+                onClick={() => navigate(-1)}
+            >
+                <ArrowBackIosIcon fontSize="small" />
+                Back
+            </Button>
 
             <div className=''>
                 <h1 className='font-bold text-xl py-7'>Delivery Address</h1>
-                <AddressCard />
+                <AddressCard address={order?.order?.shippingAddress} />
             </div>
 
             <div className='py-20'>
-                <OrderTracker activeStep={3} />
+                {orderStatus[order?.order?.orderStatus] === 0 && <h1 className='font-bold text-xl'>Order Cancelled</h1>}
+                {orderStatus[order?.order?.orderStatus] !== 0 && <OrderTracker activeStep={orderStatus[order?.order?.orderStatus]} />}
             </div>
 
             <Grid container className='space-y-5'>
-                {[1, 1, 1, 1, 1, 1].map((item, index) =>
+                {order?.order?.orderItems?.map((item, index) =>
                     <Grid key={index} item container className='shadow-xl rounded-md p-5 border' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                         <Grid item xs={6}>
                             <div className='flex items-center space-x-4'>
-                                <img className='w-[5rem] h-[5rem] object-cover object-top' draggable={false} src="https://rukminim1.flixcart.com/image/612/612/xif0q/jean/d/s/c/36-mj-bk-pl-48-comfits-original-imagqbrnyjfzhs8v.jpeg?q=70" alt="" />
+                                <img className='w-[5rem] h-[5rem] object-cover object-top' draggable={false} src={item?.product?.imageUrl} alt="" />
 
                                 <div className='space-y-2 ml-5'>
-                                    <p className='font-semibold'>Men Slim Mid Rise Black Jeans</p>
+                                    <p className='font-semibold'>{item?.product?.title}</p>
                                     <p className='space-x-5 opacity-50 text-xs font-semibold'>
-                                        <span>Color: Black</span>
-                                        <span>size: M</span>
+                                        <span>Color: {item?.product?.color}</span>
+                                        <span>size: {item?.size}</span>
                                     </p>
-                                    <p className='opacity-90 text-sm'>Seller: Comfits</p>
-                                    <p className='opacity-90 text-sm'>₹1099</p>
+                                    <div className='space-x-2'>
+                                        <span className='font-semibold'>₹{item?.product?.discountedPrice}</span>
+                                        <span className='line-through opacity-50'>₹{item?.product?.price}</span>
+                                        <span className='text-green-600 font-semibold'>{item?.product?.discountPercent}% off</span>
+                                    </div>
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={2} onClick={() => { navigate(`/product/${item?.product?.id}`) }} className='cursor-pointer hover:underline'>
                             <Box sx={{ color: deepPurple[500], alignItems: 'center', display: 'flex' }}>
                                 <StarBorderIcon sx={{ fontSize: '2rem' }} className='px-2' />
                                 <span>Rate & Review Product</span>

@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
-import { Grid } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import OrderCard from './OrderCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { getOrderByUser } from '../../../State/Order/Action'
+import { useNavigate } from 'react-router-dom'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const orderStatus = [
     { label: 'On the Way', value: 'on_the_way' },
@@ -15,6 +17,7 @@ const Order = () => {
 
     const dispatch = useDispatch();
     const { order } = useSelector(store => store);
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(getOrderByUser());
@@ -22,7 +25,13 @@ const Order = () => {
 
     return (
         <div className='px-5 lg:px-20'>
-            {console.log(order?.orders)}
+            <Button
+                color='secondary' variant='contained' sx={{ marginBottom: '1rem', px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}
+                onClick={() => navigate("/")}
+            >
+                <ArrowBackIosIcon fontSize="small" />
+                Back
+            </Button>
             <Grid container sx={{ justifyContent: 'space-between' }}>
 
                 <Grid item xs={2.5}>

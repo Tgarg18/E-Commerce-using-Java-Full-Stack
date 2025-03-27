@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getUser, logout } from "../../../State/Auth/Action";
 import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
 import { deepPurple } from "@mui/material/colors";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const Profile = () => {
 
@@ -33,7 +34,14 @@ const Profile = () => {
 
   return (
     <div className="bg-white lg:px-20">
-      <div className="pt-6">
+      <Button
+        color='secondary' variant='contained' sx={{ marginBottom: '1rem', px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}
+        onClick={() => navigate("/")}
+      >
+        <ArrowBackIosIcon fontSize="small" />
+        Back
+      </Button>
+      <div className="pt-3">
         <section className='grid grid-cols-1 gap-x-8 gap-y-10 px-4 pt-10'>
           {/* Personal Information */}
           <div className="bg-gray-50 p-6 rounded-lg">
@@ -95,6 +103,28 @@ const Profile = () => {
             >
               Edit Profile
             </Button>
+            <Button
+              variant="contained"
+              sx={{
+                mt: 3,
+                ml: 4,
+                bgcolor: "#9155fd",
+                ":hover": { bgcolor: "#563295" }
+              }}
+              onClick={() => navigate('/profile/change-password')}
+            >
+              Change Password
+            </Button>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-between gap-6 py-4 w-full">
+            <button className="px-6 py-3 w-1/2 text-lg font-semibold text-white shadow-lg transition-all duration-300 ease-in-out transform bg-[#9155fd] rounded-lg hover:bg-[#563295] hover:shadow-xl active:scale-95" onClick={() => navigate('/cart')}>
+              Cart
+            </button>
+            <button className="px-6 py-3 w-1/2 text-lg font-semibold text-white shadow-lg transition-all duration-300 ease-in-out transform bg-[#9155fd] rounded-lg hover:bg-[#563295] hover:shadow-xl active:scale-95" onClick={() => navigate('/wishlist')}>
+              Wishlist
+            </button>
           </div>
 
           {/* Addresses */}

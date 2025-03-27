@@ -22,6 +22,10 @@ const OrderCard = ({ order }) => {
                 <Grid item xs={2}>
                     <p>₹{order?.totalDiscountedPrice}</p>
                 </Grid>
+                
+                <Grid item xs={2}>
+                    <p className='opacity-50 font-semibold'>Order Status: {order?.orderStatus}</p>
+                </Grid>
 
                 <Grid item xs={4}>
                     {order?.orderStatus === "Delivered" && <div><p className='flex items-center'>

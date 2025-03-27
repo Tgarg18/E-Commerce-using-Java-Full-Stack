@@ -475,7 +475,10 @@ export default function Navigation() {
                         }}>
                           Profile
                         </MenuItem>
-                        <MenuItem onClick={() => navigate('/account/order')}>
+                        <MenuItem onClick={() => {
+                          navigate('/account/order')
+                          handleCloseUserMenu()
+                        }}>
                           My Orders
                         </MenuItem>
                         <MenuItem onClick={handleLogout} sx={{ color: "red" }}>Logout</MenuItem>

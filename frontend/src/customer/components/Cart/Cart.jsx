@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCart } from '../../../State/Cart/Action'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -23,16 +24,30 @@ const Cart = () => {
 
     if (cart?.cart?.cartItems.length == 0) {
         return (
-            <div className="flex justify-center items-center h-[50vh]">
+            <div className="flex flex-col justify-center items-center h-[50vh]">
                 <div className="text-2xl text-center text-gray-500">
                     Your cart <ShoppingCartIcon /> is empty.
                 </div>
+                <Button
+                    color='secondary' variant='contained' sx={{marginTop: '1rem', px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}
+                    onClick={() => navigate(-1)}
+                >
+                    <ArrowBackIosIcon fontSize="small" />
+                    Back
+                </Button>
             </div>
         );
     }
 
     return (
         <div>
+            <Button
+                color='secondary' variant='contained' sx={{ marginLeft: '2rem', marginBottom: '1rem', px: '2', py: '1', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" } }}
+                onClick={() => navigate(-1)}
+            >
+                <ArrowBackIosIcon fontSize="small" />
+                Back
+            </Button>
             <div className='lg:grid grid-cols-3 lg:px-16 relative'>
                 <div className='col-span-2'>
                     {cart?.cart?.cartItems

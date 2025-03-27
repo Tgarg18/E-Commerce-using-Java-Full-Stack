@@ -13,6 +13,10 @@ import ScrollToTop from '../customer/components/ScrollToTop/ScrollToTop'
 import ErrorPage from '../customer/pages/ErrorPage/ErrorPage'
 import PaymentSuccess from '../customer/components/Payment/PaymentSuccess'
 import Profile from '../customer/components/Profile/Profile'
+import EditProfile from '../customer/components/Profile/EditProfile'
+import ChangePassword from '../customer/components/Profile/ChangePassword'
+import Wishlist from '../customer/components/Wishlist/Wishlist'
+
 const CustomerRouter = () => {
     return (
         <div>
@@ -24,6 +28,8 @@ const CustomerRouter = () => {
                 <Route path='/login' element={<HomePage />} />
                 <Route path='/signup' element={<HomePage />} />
                 <Route path='/my-profile' element={<Profile />} />
+                <Route path='/profile/edit' element={<EditProfile />} />
+                <Route path='/profile/change-password' element={<ChangePassword />} />
                 <Route path='/verify-otp-signin' element={<HomePage />} />
                 <Route path='/verify-otp-signup' element={<HomePage />} />
                 <Route path='/forgot-password' element={<HomePage />} />
@@ -35,6 +41,7 @@ const CustomerRouter = () => {
                 <Route path='/product/:productId/addRating' element={<ProductDetails />} />
                 <Route path='/product/:productId/addReview' element={<ProductDetails />} />
                 <Route path='/cart' element={<Cart />} />
+                <Route path='/wishlist' element={<Wishlist />} />
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path='/account/order' element={<Order />} />
                 <Route path='/account/order/:orderId' element={<OrderDetails />} />
