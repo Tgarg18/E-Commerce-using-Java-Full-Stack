@@ -9,6 +9,7 @@ import ratingReducer from './Rating/Reducer';
 import reviewReducer from './Review/Reducer';
 import { continueWithGoogleReducer } from './ContinueWithGoogle/Reducer';
 import { forgotPasswordReducer } from './ForgotPassword/Reducer';
+import { homePageDataReducer } from './HomePageProductData/Reducer';
 
 const rootReducers = combineReducers({
     auth: authReducer,
@@ -19,7 +20,8 @@ const rootReducers = combineReducers({
     rating: ratingReducer,
     review: reviewReducer,
     continueWithGoogle: continueWithGoogleReducer,
-    forgotPasswordReducer: forgotPasswordReducer
+    forgotPasswordReducer: forgotPasswordReducer,
+    homePageData: homePageDataReducer
 })
 
 export const store = legacy_createStore(rootReducers, applyMiddleware(thunk));

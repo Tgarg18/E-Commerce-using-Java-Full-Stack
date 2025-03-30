@@ -19,12 +19,28 @@ const HomeSectionCarousel = ({ data, sectionName }) => {
 
     const onSlideChange = ({ item }) => setActiveIndex(item);
 
-    const shuffledData = [...data].sort(() => Math.random() - 0.5);
-    const items = shuffledData.slice(0, 10).map((item, index) => <HomeSectionCard product={item} key={index} />);
+    const items = data.map((item, index) => <HomeSectionCard product={item} key={index} />);
+
+    const formatCategoryName = (category) => {
+        const parts = [];
+        let currentCategory = category;
+        while (currentCategory) {
+            const formattedName = currentCategory.name
+                .split('_')
+                .filter((word, index) => !(index === 0 && (word.startsWith('men') || word.startsWith('women'))))
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            parts.push(formattedName);
+            currentCategory = currentCategory.parentCategory;
+        }
+        return parts.reverse().join(' / ');
+    };
 
     return (
         <div className=''>
-            <h2 className='text-2xl font-extrabold text-gray-800 py-5'>{sectionName}</h2>
+            <h2 className='text-2xl font-extrabold text-gray-800 py-5'>{data.length > 0 ? formatCategoryName(data[0].category) : sectionName}
+            </h2>
+            {console.log(data[0].category)}
             <div className='relative p-5 rounded'>
                 <AliceCarousel
                     mouseTracking
