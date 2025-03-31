@@ -1,23 +1,27 @@
-import { Button, Grid, Link, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+
+    const navigate = useNavigate();
+
     const footerSections = [
         {
             title: "Company",
-            links: ["About", "Blog", "Press", "Jobs", "Partners"],
+            subTitles: ["About", "Contact", "Press", "Jobs", "Partners"],
         },
         {
             title: "Solutions",
-            links: ["Marketing", "Analytics", "Commerce", "Insights", "Support"],
+            subTitles: ["Marketing", "Analytics", "Commerce", "Insights", "Support"],
         },
         {
             title: "Social",
-            links: ["Instagram", "X", "Facebook", "Youtube"],
+            subTitles: ["Instagram", "X", "Facebook", "Youtube"],
         },
         {
             title: "Legal",
-            links: ["Claim", "Privacy", "Terms"],
+            subTitles: ["Claim", "Privacy", "Terms"],
         },
     ];
 
@@ -41,7 +45,7 @@ const Footer = () => {
                         >
                             {section.title}
                         </Typography>
-                        {section.links.map((link, idx) => (
+                        {section.subTitles.map((subTitle, idx) => (
                             <Button
                                 key={idx}
                                 sx={{
@@ -51,9 +55,10 @@ const Footer = () => {
                                     textTransform: "none",
                                     textAlign: "left",
                                 }}
-                                aria-label={`Navigate to ${link}`}
+                                aria-label={`Navigate to ${subTitle}`}
+                                onClick={() => navigate(`/${section.title.toLowerCase()}/${subTitle.toLowerCase()}`)}
                             >
-                                {link}
+                                {subTitle}
                             </Button>
                         ))}
                     </Grid>

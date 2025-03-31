@@ -7,7 +7,6 @@ export const navigation = {
           {
             name: 'New Arrivals',
             href: '/',
-            imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg',
             imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
             imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
           },

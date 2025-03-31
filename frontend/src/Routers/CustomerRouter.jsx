@@ -16,6 +16,8 @@ import Profile from '../customer/components/Profile/Profile'
 import EditProfile from '../customer/components/Profile/EditProfile'
 import ChangePassword from '../customer/components/Profile/ChangePassword'
 import Wishlist from '../customer/components/Wishlist/Wishlist'
+import About from '../customer/pages/FooterPages/About'
+import Contact from '../customer/pages/FooterPages/Contact'
 
 const CustomerRouter = () => {
     return (
@@ -46,6 +48,8 @@ const CustomerRouter = () => {
                 <Route path='/account/order' element={<Order />} />
                 <Route path='/account/order/:orderId' element={<OrderDetails />} />
                 <Route path='/payment/:orderId' element={<PaymentSuccess />} />
+                <Route path='/company/about' element={<About />} />
+                <Route path='/company/contact' element={<Contact />} />
                 <Route path='*' element={<ErrorPage />} />
             </Routes>
 

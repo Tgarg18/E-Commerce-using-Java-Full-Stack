@@ -59,12 +59,13 @@ const OrderDetails = () => {
                                     <p className='font-semibold'>{item?.product?.title}</p>
                                     <p className='space-x-5 opacity-50 text-xs font-semibold'>
                                         <span>Color: {item?.product?.color}</span>
-                                        <span>size: {item?.size}</span>
+                                        <span>Size: {item?.size}</span>
+                                        <span>Quantity: {item?.quantity}</span>
                                     </p>
                                     <div className='space-x-2'>
-                                        <span className='font-semibold'>₹{item?.product?.discountedPrice}</span>
-                                        <span className='line-through opacity-50'>₹{item?.product?.price}</span>
-                                        <span className='text-green-600 font-semibold'>{item?.product?.discountPercent}% off</span>
+                                        <span className='font-semibold'>₹{item?.discountedPrice}</span>
+                                        <span className='line-through opacity-50'>₹{item?.price}</span>
+                                        <span className='text-green-600 font-semibold'>{(item?.price - item?.discountedPrice) / 100}% off</span>
                                     </div>
                                 </div>
                             </div>
