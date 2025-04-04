@@ -11,6 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BackendApplication {
 
 	public static void main(String[] args) {
+		loadEnvironmentVariables();
+		SpringApplication.run(BackendApplication.class, args);
+	}
+
+	public static void loadEnvironmentVariables() {
 
 		String workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString();
 		String envFilePath;
@@ -39,8 +44,5 @@ public class BackendApplication {
 		System.setProperty("GOOGLE_CLIENT_SECRET", dotenv.get("GOOGLE_CLIENT_SECRET"));
 		System.setProperty("GOOGLE_REDIRECT_URI", dotenv.get("GOOGLE_REDIRECT_URI"));
 
-		SpringApplication.run(BackendApplication.class, args);
-
 	}
-
 }

@@ -1,9 +1,19 @@
 package outfitoasis.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import outfitoasis.model.OrderItem;
+import outfitoasis.repository.OrderItemRepository;
 
-public interface OrderItemService {
+@Service
+public class OrderItemService {
 
-    public OrderItem createOrderItem(OrderItem orderItem);
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    public OrderItem createOrderItem(OrderItem orderItem) {
+        return orderItemRepository.save(orderItem);
+    }
 
 }
