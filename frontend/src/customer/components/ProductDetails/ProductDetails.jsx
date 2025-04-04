@@ -9,6 +9,9 @@ import { findProducts, findProductsById } from '../../../State/Product/Action';
 import { addItemToCart } from '../../../State/Cart/Action';
 import { toast } from "react-toastify";
 import ProductModal from './ProductModal';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import { addToWishlist, isProductInWishlist, removeFromWishlist } from '../../../State/Wishlist/Action';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -37,7 +40,7 @@ export default function ProductDetails() {
             .replace(/\b\w/g, char => char.toUpperCase());
     };
 
-    const { products } = useSelector(store => store);
+    const { products, wishlist } = useSelector(store => store);
 
     const handleAddToCart = () => {
         if (selectedSize == null) {
@@ -51,6 +54,18 @@ export default function ProductDetails() {
         dispatch(addItemToCart(data));
         toast.success("Product added to cart successfully!");
     };
+
+    const handleAddToWishlist = () => {
+        dispatch(addToWishlist(params.productId));
+    }
+
+    const handleRemoveFromWishlist = () => {
+        dispatch(removeFromWishlist(params.productId));
+    }
+
+    useEffect(() => {
+        dispatch(isProductInWishlist(params.productId));
+    }, [params.productId]);
 
     useEffect(() => {
         const data = {
@@ -239,6 +254,22 @@ export default function ProductDetails() {
                                 <Button onClick={handleAddToCart} color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#9155fd", ":hover": { bgcolor: "#563295" }, mt: 5, width: '100%' }}>
                                     Add To Cart
                                 </Button>
+                                {wishlist?.message === "Product is not in wishlist" ?
+                                    <Button onClick={handleAddToWishlist} color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#ffffff", color: "#9155fd", ":hover": { bgcolor: "#e5e5e5", fontWeight: "bold" }, mt: 2, mb: 2, width: '100%' }}>
+                                        <FavoriteBorderOutlinedIcon sx={{ color: "#9155fd", mr: 1 }} />
+                                        <span className='font-semibold'>Add To Wishlist</span>
+                                    </Button>
+                                    :
+                                    (
+                                        wishlist?.message === "Product is in wishlist" ?
+                                            <Button onClick={handleRemoveFromWishlist} color='secondary' variant='contained' sx={{ px: '2rem', py: '1rem', bgcolor: "#ffffff", color: "#9155fd", ":hover": { bgcolor: "#e5e5e5", fontWeight: "bold" }, mt: 2, mb: 2, width: '100%' }}>
+                                                <FavoriteOutlinedIcon sx={{ color: "#9155fd", mr: 1 }} />
+                                                <span className='font-semibold'>Remove From Wishlist</span>
+                                            </Button>
+                                            :
+                                            null
+                                    )
+                                }
                             </form>
                         </div>
 

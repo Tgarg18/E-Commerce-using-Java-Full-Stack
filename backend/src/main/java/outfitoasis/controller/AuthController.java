@@ -3,6 +3,7 @@ package outfitoasis.controller;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,26 +38,26 @@ import outfitoasis.service.CustomUserServiceImplementation;
 @RequestMapping("/auth")
 public class AuthController {
 
+    @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
     private JwtProvider jwtProvider;
+    
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
     private CustomUserServiceImplementation customUserServiceImplementation;
+    
+    @Autowired
     private CartService cartService;
+    
+    @Autowired
     private AuthService authService;
 
     @Value("${GOOGLE_CLIENT_ID}")
     String GoogleClientId;
-
-    AuthController(UserRepository userRepository, CustomUserServiceImplementation customUserServiceImplementation,
-            PasswordEncoder passwordEncoder, JwtProvider jwtProvider, CartService cartService,
-            AuthService authService) {
-        this.userRepository = userRepository;
-        this.customUserServiceImplementation = customUserServiceImplementation;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtProvider = jwtProvider;
-        this.cartService = cartService;
-        this.authService = authService;
-    }
 
     @SuppressWarnings("deprecation")
     @PostMapping("/google")
